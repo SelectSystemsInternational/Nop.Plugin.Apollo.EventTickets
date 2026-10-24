@@ -360,6 +360,7 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService,
     #endregion
 
     #region Ticket
+
     /// <summary>
     /// Print addresses
     /// </summary>
@@ -443,7 +444,7 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService,
             var logoFilePath = await _thumbService.GetThumbLocalPathAsync(pictureUrl);
             var logo = Image.GetInstance(logoFilePath);
             logo.RotationDegrees = 90;
-            float size = 100;
+            float size = 90;
             if (_eventTicketSettings.LogoSize != 0)
                 size = _eventTicketSettings.LogoSize;
             logo.ScaleToFit(size, size);
@@ -587,7 +588,7 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService,
         doc.Add(ticketTable);
     }
 
-    public async Task PrintTicketConditionsAsync(Document doc, Language lang, Font titleFont, Font bodyFont)
+    public new async Task PrintTicketConditionsAsync(Document doc, Language lang, Font titleFont, Font bodyFont)
     {
 
         var conditionsHeader = new PdfPTable(1)
