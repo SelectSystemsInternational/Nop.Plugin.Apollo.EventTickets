@@ -45,7 +45,7 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService
     #region Fields
 
     protected readonly ICustomerService _customerService;
-    protected readonly IEventTicketService _eventTicketService;
+    protected IEventTicketService EventTicketService => EngineContext.Current.Resolve<IEventTicketService>();
     protected readonly EventTicketSettings _eventTicketSettings;
     protected readonly IProductTypeExtensionsService _productTypeExtensionsService;
 
@@ -94,7 +94,6 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService
         IApolloCoreService apolloCoreService,
         ApolloCoreSettings apolloCoreSettings,
         ICustomerService customerService,
-        IEventTicketService eventTicketService,
         EventTicketSettings eventTicketSettings,
         IProductTypeExtensionsService productTypeExtensionsService) : base(pdfSettings,
             addressSettings,
@@ -138,7 +137,6 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService
             apolloCoreSettings)
     {
         _customerService = customerService;
-        _eventTicketService = eventTicketService;
         _eventTicketSettings = eventTicketSettings;
         _productTypeExtensionsService = productTypeExtensionsService;
     }
@@ -1038,7 +1036,7 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService
 
                 foreach (var ptv in productTicketVariants)
                 {
-                    var opvcOnline = await _eventTicketService.GetAllOrderProductVariantsSummaryAsync(0, ptv.Id, null, null, true);
+                    var opvcOnline = await EventTicketService.GetAllOrderProductVariantsSummaryAsync(0, ptv.Id, null, null, true);
                     opvCollection.AddRange(opvcOnline);
                 }
 
@@ -1239,7 +1237,7 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService
                 {
                     var opvCollection = new List<OrderTicketItem>();
 
-                    var opvcOnline = await _eventTicketService.GetAllOrderProductVariantsSummaryAsync(0, ptv.Id, null, null, true);
+                    var opvcOnline = await EventTicketService.GetAllOrderProductVariantsSummaryAsync(0, ptv.Id, null, null, true);
                     if (opvcOnline.Count > 0)
                     {
                         var dtNow = DateTime.UtcNow;
@@ -1441,7 +1439,7 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService
             "Plugin.Apollo.EventTickets.Admin.PdfEventDoorReport.Details",
             pdfSettingsByStore, lang, attributesFont, titleFont, doc, store);
 
-        var pte = await _eventTicketService.GetEventTicketProductTypeExtensionAsync(product);
+        var pte = await EventTicketService.GetEventTicketProductTypeExtensionAsync(product);
         if (pte != null)
         {
             var orderTicketItems = new List<OrderTicketItem>();
@@ -1457,7 +1455,7 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService
 
             foreach (var ptv in productTicketVariants)
             {
-                var opv = await _eventTicketService.GetAllOrderProductVariantsSummaryAsync(0, ptv.Id, null, null, true);
+                var opv = await EventTicketService.GetAllOrderProductVariantsSummaryAsync(0, ptv.Id, null, null, true);
                 orderTicketItems.AddRange(opv);
             }
 
@@ -1520,7 +1518,7 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService
         {
             ProductName = x.Product.Name,
             OrderCustomerFullName = await _customerService.GetCustomerFullNameAsync(await _customerService.GetCustomerByIdAsync(x.Order.CustomerId)),
-            OrderAdditionalNames = await _eventTicketService.GetCustomerAdditionalNameDetailsAsync(x.OrderItemId),
+            OrderAdditionalNames = await EventTicketService.GetCustomerAdditionalNameDetailsAsync(x.OrderItemId),
             x.Quantity,
             OrderTransactionId = x.Order.AuthorizationTransactionId == null ? "" : x.Order.AuthorizationTransactionId,
             OrderId = x.Order.Id,
@@ -1853,7 +1851,7 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService
             "Plugin.Apollo.EventTickets.Admin.PdfSettlementReport.Details",
             pdfSettingsByStore, lang, attributesFont, titleFont, doc, store);
 
-        var pte = await _eventTicketService.GetEventTicketProductTypeExtensionAsync(product);
+        var pte = await EventTicketService.GetEventTicketProductTypeExtensionAsync(product);
         if (pte != null)
         {
 
@@ -1930,7 +1928,7 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService
         doc.Add(headerTable);
         doc.Add(new Paragraph(" "));
 
-        var pte = await _eventTicketService.GetEventTicketProductTypeExtensionAsync(product);
+        var pte = await EventTicketService.GetEventTicketProductTypeExtensionAsync(product);
         if (pte != null)
         {
             var productTicketVariants = new List<Product>();
@@ -1983,7 +1981,7 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService
             {
                 var opvCollection = new List<OrderTicketItem>();
 
-                var opvcOnline = await _eventTicketService.GetAllOrderProductVariantsSummaryAsync(0, ptv.Id, null, null, true);
+                var opvcOnline = await EventTicketService.GetAllOrderProductVariantsSummaryAsync(0, ptv.Id, null, null, true);
                 if (opvcOnline.Count > 0)
                 {
                     var dtNow = DateTime.UtcNow;
@@ -2191,9 +2189,9 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService
     {
         int totalQty = 0;
         totalQty += pv.StockQuantity +
-            _eventTicketService.GetProductVariantOrderedTotal(pv.Id, null, null, null, OrderStatus.Complete, null, null) +
-            _eventTicketService.GetProductVariantOrderedTotal(pv.Id, null, null, null, OrderStatus.Processing, null, null) +
-            _eventTicketService.GetProductVariantOrderedTotal(pv.Id, null, null, null, OrderStatus.Pending, null, null);
+            EventTicketService.GetProductVariantOrderedTotal(pv.Id, null, null, null, OrderStatus.Complete, null, null) +
+            EventTicketService.GetProductVariantOrderedTotal(pv.Id, null, null, null, OrderStatus.Processing, null, null) +
+            EventTicketService.GetProductVariantOrderedTotal(pv.Id, null, null, null, OrderStatus.Pending, null, null);
 
         return totalQty.ToString();
     }
