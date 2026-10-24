@@ -39,7 +39,7 @@ using Nop.Services.Customers;
 
 namespace Nop.Plugin.Apollo.EventTickets.Services;
 
-public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService
+public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService, IEventTicketPdfRenderer
 {
 
     #region Fields
@@ -369,7 +369,7 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService
     /// <param name="order">Order</param>
     /// <param name="font">Text font</param>
     /// <param name="doc">Document</param>
-    protected override async Task PrintTicket(PdfSettings pdfSettingsByStore, Document doc, Language lang, OrderItem orderItem, string transactionId)
+    public async Task PrintTicketAsync(PdfSettings pdfSettingsByStore, Document doc, Language lang, OrderItem orderItem, string transactionId)
     {
 
         //fonts
@@ -587,7 +587,7 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService
         doc.Add(ticketTable);
     }
 
-    protected override async Task PrintTicketConditionsAsync(Document doc, Language lang, Font titleFont, Font bodyFont)
+    public async Task PrintTicketConditionsAsync(Document doc, Language lang, Font titleFont, Font bodyFont)
     {
 
         var conditionsHeader = new PdfPTable(1)
