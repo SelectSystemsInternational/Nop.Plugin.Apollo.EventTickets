@@ -34,7 +34,7 @@ public class NopStartup : INopStartup
         services.AddScoped<IEventTicketsMessageService, EventTicketsMessageService>();
         services.AddScoped<IEventTicketsModelFactory, EventTicketsModelFactory>();
         services.AddScoped<IEventTicketsPdfService, EventTicketsPdfService>();
-        services.Replace(ServiceDescriptor.Scoped<IPdfService, EventTicketsPdfService>());
+        services.AddScoped<IEventTicketPdfRenderer, EventTicketsPdfService>();
         services.AddScoped<IExportImportManager, ExportImportManager>();
 
         //add object context
