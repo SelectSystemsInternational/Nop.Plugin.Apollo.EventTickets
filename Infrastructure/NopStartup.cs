@@ -34,6 +34,7 @@ public class NopStartup : INopStartup
         services.AddScoped<IEventTicketsMessageService, EventTicketsMessageService>();
         services.AddScoped<IEventTicketsModelFactory, EventTicketsModelFactory>();
         services.AddScoped<IEventTicketsPdfService, EventTicketsPdfService>();
+        services.AddScoped<IPdfService, EventTicketsPdfService>();
         services.AddScoped<IExportImportManager, ExportImportManager>();
 
         //add object context
@@ -55,5 +56,5 @@ public class NopStartup : INopStartup
     {
     }
 
-    public int Order => 3000;
+    public int Order => int.MaxValue;
 }
