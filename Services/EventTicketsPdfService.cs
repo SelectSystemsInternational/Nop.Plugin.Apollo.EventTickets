@@ -371,7 +371,7 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService
     /// <param name="order">Order</param>
     /// <param name="font">Text font</param>
     /// <param name="doc">Document</param>
-    protected virtual async Task PrintTicket(PdfSettings pdfSettingsByStore, Document doc, Language lang, OrderItem orderItem, string transactionId)
+    protected override async Task PrintTicket(PdfSettings pdfSettingsByStore, Document doc, Language lang, OrderItem orderItem, string transactionId)
     {
 
         //fonts
@@ -589,7 +589,7 @@ public class EventTicketsPdfService : ApolloPdfService, IEventTicketsPdfService
         doc.Add(ticketTable);
     }
 
-    protected virtual async Task PrintTicketConditionsAsync(Document doc, Language lang, Font titleFont, Font bodyFont)
+    protected override async Task PrintTicketConditionsAsync(Document doc, Language lang, Font titleFont, Font bodyFont)
     {
 
         var conditionsHeader = new PdfPTable(1)
