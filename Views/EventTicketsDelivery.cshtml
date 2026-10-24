@@ -1,0 +1,448 @@
+﻿@model Nop.Plugin.Apollo.EventTickets.Models.EventTicketsDeliverySearchModel
+
+@using Nop.Core.Domain.Common
+@using Nop.Web.Framework.Models.DataTables
+
+@using Nop.Plugin.Apollo.Core.Services
+@using Nop.Plugin.Apollo.EventTickets.Models
+
+@inject Nop.Services.Catalog.IProductService _productService
+@inject AdminAreaSettings adminAreaSettings
+@inject IApolloCoreService apolloCoreService
+
+@{
+    Layout = "_AdminLayout";
+
+    var defaultGridPageSize = adminAreaSettings.DefaultGridPageSize;
+    var gridPageSizes = adminAreaSettings.GridPageSizes;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("Nop.Plugin.Apollo.EventTickets.EventTicketsDelivery");
+
+    //Global script variables
+    string momentToYearFormat = "YYYY-MM-DD";
+    string momentToShortFormat = await apolloCoreService.GetLocalisedShortDateFormatAsync();
+    string kendoToStringFormat = await apolloCoreService.GetLocalisedDisplayShortDateFormatAsync();
+
+    var GroupProductsInUse = "none";
+    var NotRequiredInProcess = "none";
+    var OrderWorkflowInUse = "none";
+}
+
+<script src="~/Plugins/SSI.Apollo.EventTickets/Scripts/moment.min.js"></script>
+
+<style>
+    thead.k-grid-header tr th:nth-child(2) {
+        min-width: 250px !important;
+    }
+</style>
+
+<div class="content">
+    <div class="form-horizontal">
+        <form asp-controller="EventTickets" asp-action="EventTicketsDelivery" method="post">
+            <div class="content-header clearfix">
+                <h1 class="float-left">
+                    @T("Plugin.Apollo.EventTickets.Delivery")
+                </h1>
+                <div class="float-right">
+                    <div class="btn-group">
+                        <button type="button" class="btn bg-purple">
+                            <i class="fa fa-file-pdf-o"></i>
+                            @T("Plugin.Apollo.EventTickets.Admin.PdfReports")
+                        </button>
+                        <button type="button" class="btn bg-purple dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">&nbsp;</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <button type="submit" name="pdf-report-all-delivery">
+                                    @T("Plugin.Apollo.EventTickets.Admin.PdfReport.All")
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" id="pdf-report-selected-delivery">
+                                    @T("Plugin.Apollo.EventTickets.Admin.PdfReport.Selected")
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success">
+                            <i class="fa fa-download"></i>
+                            @T("Admin.Common.Export")
+                        </button>
+                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">&nbsp;</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <button type="submit" name="exportexcel-all-delivery">
+                                    <i class="fa fa-file-excel-o"></i>
+                                    @T("Admin.Common.ExportToExcel.All")
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" id="exportexcel-selected-delivery">
+                                    <i class="fa fa-file-excel-o"></i>
+                                    @T("Admin.Common.ExportToExcel.Selected")
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="btn-group" style="display:@OrderWorkflowInUse">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myMarkOrderReturnedToBeProcessedModal">
+                            @T("Plugin.Apollo.EventTickets.Delivery.ReturnOrdersToProcess")
+                        </button>
+                    </div>
+                    <div class="btn-group" style="display:@OrderWorkflowInUse">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myMarkOrderAsInTransitModal">
+                            @T("Plugin.Apollo.EventTickets.Delivery.SetOrdersInTransit")
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <div class="form-horizontal">
+                    <div class="cards-group">
+                        <div class="card card-default card-search">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group row" style="display:@GroupProductsInUse">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="GroupProductId" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="GroupProductId" asp-items="Model.AvailableGroupProducts" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" style="display:@NotRequiredInProcess">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="AssociatedProductId" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="AssociatedProductId" asp-items="Model.AvailableAssociatedProducts" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" style="display:@NotRequiredInProcess">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="FromDate" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" name="@Model.FromDate" id="FromDate" value="@Model.FDate" />
+                                                <input type="hidden" name="@Model.FDate" id="FDate" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" style="display:@NotRequiredInProcess">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="ToDate" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" name="@Model.ToDate" id="ToDate" value="@Model.TDate" />
+                                                <input type="hidden" name="@Model.TDate" id="TDate" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group row" style="display:@NotRequiredInProcess">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="PaymentMethod" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="PaymentMethod" asp-items="@Model.AvailablePaymentMethods" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" style="display:@NotRequiredInProcess">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="OrderbyName" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="OrderbyName" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" style="display:@NotRequiredInProcess">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="Ispay" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="Ispay" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="text-center col-12">
+                                        <button type="button" id="Search-EventTicketsDelivery" class="btn btn-primary btn-search">
+                                            <i class="fas fa-search"></i>
+                                            @T("Admin.Common.Search")
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-default">
+                            <div class="card-body">
+                                @await Html.PartialAsync("Table", new DataTablesModel
+                           {
+                               Name = "EventTicketsDelivery-Grid",
+                               UrlRead = new DataUrl("EventTicketsDeliveryList", "EventTickets", null),
+                               SearchButtonId = "Search-EventTicketsDelivery",
+                               Length = Model.PageSize,
+                               LengthMenu = Model.AvailablePageSizes,
+                               Filters = new List<FilterParameter>
+                                    {
+                                        new FilterParameter(nameof(Model.GroupProductId)),
+                                        new FilterParameter(nameof(Model.AssociatedProductId)),
+                                        new FilterParameter(nameof(Model.FDate)),
+                                        new FilterParameter(nameof(Model.TDate)),
+                                        new FilterParameter(nameof(Model.PaymentMethod)),
+                                        new FilterParameter(nameof(Model.OrderbyName), typeof(bool)),
+                                        new FilterParameter(nameof(Model.Ispay), typeof(bool)),
+                                    },
+                               ColumnCollection = new List<ColumnProperty>
+                                    {
+                                        new ColumnProperty(nameof(EventTicketsDeliveryModel.Id))
+                                        {
+                                            IsMasterCheckBox = true,
+                                            Render = new RenderCheckBox("checkbox_Accproducts"),
+                                            ClassName =  NopColumnClassDefaults.CenterAll,
+                                            Width = "30",
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsDeliveryModel.OrderId))
+                                        {
+                                            Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.OrderId").Text,
+                                            ClassName =  NopColumnClassDefaults.CenterAll,
+                                            Width = "30",
+                                            Render = new RenderLink(new DataUrl("~/Admin/Order/Edit/", nameof(EventTicketsDeliveryModel.OrderId)))
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsDeliveryModel.Name))
+                                        {
+                                            Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.Name").Text,
+                                            Width = "250",
+                                            Render = new RenderLink(new DataUrl("~/Admin/Ticket/Edit/", nameof(EventTicketsDeliveryModel.ProductId)))
+
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsDeliveryModel.AttributeDescription))
+                                        {
+                                            Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.AttributeDescription").Text,
+                                            Width = "200",
+                                            Encode = false
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsDeliveryModel.Quantity))
+                                        {
+                                            Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.Quantity").Text,
+                                            ClassName =  NopColumnClassDefaults.CenterAll,
+                                            Width = "50"
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsDeliveryModel.ShippingMethodSystemName))
+                                        {
+                                            Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.ShippingMethod").Text,
+                                            ClassName =  NopColumnClassDefaults.CenterAll,
+                                            Width = "130"
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsDeliveryModel.CustomerEmail))
+                                        {
+                                            Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.CustomerEmail").Text,
+                                            Width = "200"
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsDeliveryModel.DisplayUrl))
+                                        {
+                                            Title = T("Admin.Common.View").Text,
+                                            Width = "60",
+                                            ClassName =  NopColumnClassDefaults.Button,
+                                            Render = new RenderCustom("renderDisplayUrl")
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsDeliveryModel.ShipmentUrl))
+                                        {
+                                            Title = T("Admin.Common.View").Text,
+                                            Width = "60",
+                                            ClassName =  NopColumnClassDefaults.Button,
+                                            Render = new RenderCustom("renderShipmentUrl")
+                                        }
+                                    }
+                                })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+        $('#@Html.IdFor(model=>model.GroupProductId)').change(function () {
+            var Selecteditem = $(this).val();
+            var ddlAssociatedProducts = $('#@Html.IdFor(model=>model.AssociatedProductId)');
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.Action("GetAssociatedProductsByGroupId", "EventTickets"))",
+                data: { GroupProductId: Selecteditem },
+                success: function (data) {
+                    ddlAssociatedProducts.html('');
+                    ddlAssociatedProducts.append($('<option></option').val(0).html('--Select--'));
+                    if (data != null) {
+                        $.each(data, function (id, option) {
+                            ddlAssociatedProducts.append($('<option></option>').val(option.id).html(option.name));
+                        });
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert('Failed to retrieve associatedProducts.');
+                }
+            });
+        });
+        function renderDisplayUrl(data, type, row, meta) {
+            if (row.DisplayUrl && row.DisplayUrl.length > 0) {
+                return '<a target="_blank" class="btn btn-default" href="' + row.DisplayUrl + '"><i class="fa fa-cog"></i>@T("Plugin.Apollo.EventTickets.Delivery.Order")</a>';
+            } else {
+                return '';
+            }
+        }
+        function renderShipmentUrl(data, type, row, meta) {
+            if (row.ShipmentUrl && row.ShipmentUrl.length > 0) {
+                return '<a target="_blank" class="btn btn-default" href="' + row.ShipmentUrl + '"><i class="fa fa-cog"></i>@T("Plugin.Apollo.EventTickets.Delivery.Shipment")</a>';
+            } else {
+                return '';
+            }
+        }
+            </script>
+        </form>
+
+        <form asp-controller="EventTickets" asp-action="ExportDeliveryExcelSelected" method="post" id="export-delivery-excel-selected-form">
+            <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+        </form>
+
+        <script>
+            $(document).ready(function () {
+                $('#exportexcel-selected-delivery').click(function (e) {
+                    e.preventDefault();
+                    var ids = selectedIds.join(",");
+                    $('#export-delivery-excel-selected-form #selectedIds').val(ids);
+                    $('#export-delivery-excel-selected-form').submit();
+                    return false;
+                });
+            });
+        </script>
+
+        <form asp-controller="EventTickets" asp-action="PdfDeliveryReportSelected" method="post" id="pdf-report-selected-delivery-form">
+            <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+        </form>
+
+        <form asp-controller="EventTickets" asp-action="MarkOrderReturnedToBeProcessed" method="post" id="MarkOrderReturnedToBeProcessed-selected-form">
+            <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+        </form>
+
+        <form asp-controller="EventTickets" asp-action="MarkOrderAsInTransit" method="post" id="MarkOrderAsInTransit-selected-form">
+            <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+        </form>
+
+        <script>
+            $(document).ready(function () {
+                $('#pdf-report-selected-delivery').click(function (e) {
+                    debugger;
+                    e.preventDefault();
+                    var ids = selectedIds.join(",");
+                    $('#pdf-report-selected-delivery-form #selectedIds').val(ids);
+                    $('#pdf-report-selected-delivery-form').submit();
+                    return false;
+                });
+                $('#MarkOrderReturnedToBeProcessed').click(function (e) {
+                    e.preventDefault();
+                    var ids = selectedIds.join(",");
+                    $('#MarkOrderReturnedToBeProcessed-selected-form #selectedIds').val(ids);
+                    $('#MarkOrderReturnedToBeProcessed-selected-form').submit();
+                    return false;
+                });
+                $('#MarkOrderAsInTransit').click(function (e) {
+                    e.preventDefault();
+                    var ids = selectedIds.join(",");
+                    $('#MarkOrderAsInTransit-selected-form #selectedIds').val(ids);
+                    $('#MarkOrderAsInTransit-selected-form').submit();
+                    return false;
+                });
+
+            });
+        </script>
+
+        <div id="myMarkAsPaidModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Are you sure?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to perform this action?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">No, Cancel</button>
+                        <button type="button" class="btn btn-primary" name="markorderaspaid" id="markorderaspaid">Yes</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="myMarkOrderReturnedToBeProcessedModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Are you sure?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to perform this action?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">No, Cancel</button>
+                        <button type="button" class="btn btn-primary" name="MarkOrderReturnedToBeProcessed" id="MarkOrderReturnedToBeProcessed">Yes</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="myMarkOrderAsInTransitModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Are you sure?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to perform this action?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">No, Cancel</button>
+                        <button type="button" class="btn btn-primary" name="MarkOrderAsInTransit" id="MarkOrderAsInTransit">Yes</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#FromDate").kendoDatePicker({
+            format: "@kendoToStringFormat"
+        });
+        $('#FromDate').change(function () {
+            var eventStartDateTimeUtc = $('#@Html.IdFor(model => model.FromDate)').val();
+            var startDate = moment(eventStartDateTimeUtc, "@momentToShortFormat");
+            var Sdate = startDate.format("@momentToYearFormat")
+            $("#FDate").val(Sdate);
+        });
+        $("#ToDate").kendoDatePicker({
+            format: "@kendoToStringFormat"
+        });
+         $('#ToDate').change(function () {
+            var eventToDateTimeUtc =$('#@Html.IdFor(model => model.ToDate)').val()
+            var endDate = moment(eventToDateTimeUtc, "@momentToShortFormat");
+            var Edate = endDate.format("@momentToYearFormat")
+            $("#TDate").val(Edate);
+        });
+    });
+</script>

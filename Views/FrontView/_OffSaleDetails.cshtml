@@ -1,0 +1,53 @@
+﻿@model EventTicketProductDetailsModel
+
+@using Nop.Plugin.Apollo.EventTickets.Models
+@using Nop.Plugin.Apollo.EventTickets.Settings
+
+@{
+    var eventSettings = Nop.Core.Infrastructure.EngineContext.Current.Resolve<EventTicketSettings>();
+}
+
+<style>
+    .product-essential .ticket-offsale,
+    .variant-overview .ticket-offsale {
+        margin: 0 0 15px;
+    }
+
+        .product-essential .ticket-offsale > span,
+        .variant-overview .ticket-offsale > span {
+            font-size: 14px;
+            display: inline-block;
+            color: red;
+        }
+</style>
+
+@*Display Product Offsale Information or Full Description*@
+@{
+    bool offSale = false;
+
+    var reportDateTime = Model.ProductTypeExtensionModel.AvailabilityEndDate;
+    if (!string.IsNullOrWhiteSpace(reportDateTime))
+    {
+        var offTime = Model.ProductTypeExtensionModel.EventTicketReportDateTime.AddMinutes(eventSettings.OffSaleTimeInMinutes);
+        offSale = DateTime.UtcNow.CompareTo(offTime) > 0;
+    }
+
+    var associatedTickets = Model.ProductDetailsModel.AssociatedProducts;
+
+    if (offSale)
+    {
+        <div class="ticket-offsale">
+            <span class="label">@T("Plugin.Apollo.EventTickets.OffSale")</span>
+        </div>
+    }
+    else
+    {
+        if (!string.IsNullOrEmpty(Model.ProductDetailsModel.FullDescription))
+        {
+            <div class="full-description">
+                @Html.Raw(Model.ProductDetailsModel.FullDescription)
+            </div>
+
+        }
+    }
+}

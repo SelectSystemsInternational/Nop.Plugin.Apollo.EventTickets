@@ -1,0 +1,50 @@
+﻿@model Nop.Plugin.Apollo.OrderWorkflow.Models.ManagementModel
+
+@inject Nop.Core.IWebHelper webHelper
+
+@using Nop.Plugin.Apollo.OrderWorkflow.Models
+
+@{
+    Layout = "~/Plugins/SSI.Apollo.Core/Views/Shared/_AdminLayout.cshtml";
+    //page title
+    ViewBag.Title = T("Plugin.Apollo.OrderWorkflow.Manage").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("Nop.Plugin.Apollo.Core.Manage");
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Plugin.Apollo.OrderWorkflow.Manage")
+    </h1>
+    <div class="float-right">
+        &nbsp;
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+            <div class="card card-default">
+                <div class="card-body">
+                    <nop-tabs id="apollo-configure">
+                        <nop-tab asp-name="apollo-product-settings" asp-title="@T("Plugin.Apollo.Core.Configure.ProductSettings")" asp-default="true">
+                            @await Html.PartialAsync("~/Plugins/SSI.Apollo.Core/Views/Manage/_ProductTypeExtensionSettings.cshtml", Model.ProductTypeExtensionSettingsSearchModel)
+                        </nop-tab>
+                        <nop-tab asp-name="apollo-system-settings" asp-title="@T("Plugin.Apollo.OrderWorkflow.Configure")" asp-default="false">
+                        </nop-tab>
+                    </nop-tabs>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@*save selected tab name*@
+<input type="hidden" id="selected-tab-name" name="selected-tab-name" value="@(Html.GetSelectedTabName())">
+<script>
+    $(document).ready(function () {
+        bindBootstrapTabSelectEvent('apollo-configure');
+    });
+</script>
+

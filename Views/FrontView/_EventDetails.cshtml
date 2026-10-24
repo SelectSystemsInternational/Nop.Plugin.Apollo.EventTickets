@@ -1,0 +1,49 @@
+﻿@model EventTicketProductDetailsModel
+
+<style>
+    .overview .event-date,
+    .variant-overview .event-date {
+        margin: 0 0 15px;
+    }
+
+        .overview .event-date > span,
+        .variant-overview .event-date > span {
+            font-size: 14px;
+            display: inline-block;
+        }
+
+    .overview .vendoraddress > span {
+        font-size: 14px;
+        display: inline-block;
+    }
+</style>
+
+<div class="additional-details">
+
+    @*Event Date*@
+    @if (!string.IsNullOrWhiteSpace(Model.ProductTypeExtensionModel.AvailabilityStartDate))
+    {
+        <div class="event-date" @(string.IsNullOrWhiteSpace(Model.ProductTypeExtensionModel.AvailabilityStartDate) ? Html.Raw("style=\"display:none\"") : null)>
+            <span class="label">@T("Plugin.Apollo.EventTickets.Fields.EventTicketDateTime"):</span>
+            <span class="value">@Model.ProductTypeExtensionModel.AvailabilityStartDate</span>
+        </div>
+    }
+
+    <div class="product-vendor">
+        <span class="label">@T("Products.Vendor"):</span>
+        <span class="value"><a href="@Url.RouteUrl("Vendor", new { SeName = Model.VendorModel.SeName })">@Model.VendorModel.Name</a></span><br />
+    </div>
+    <div>
+        <span class="label">@T("Plugin.Apollo.EventTickets.Fields.VenueAddress"):</span>
+        <span class="vendoraddress" id="address-@Model.Id">@Model.ProductTypeExtensionModel.VenueAddress</span>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.ProductTypeExtensionModel.ProductTime))
+    {
+        <div class="gtin" @(string.IsNullOrWhiteSpace(Model.ProductTypeExtensionModel.ProductTime) ? Html.Raw("style=\"display:none\"") : null)>
+            <span class="label">@T("Plugin.Apollo.EventTickets.Fields.ProductTime"):</span>
+            <span class="value" id="gtin-@Model.Id">@Model.ProductTypeExtensionModel.ProductTime</span>
+        </div>
+    }
+
+</div>

@@ -1,0 +1,223 @@
+﻿@model Nop.Plugin.Apollo.EventTickets.Models.ConfigureModel
+
+@inject Nop.Core.IWebHelper webHelper
+
+@{
+    Layout = "_AdminLayout";
+
+    //page title
+    ViewBag.Title = T("Plugin.Apollo.EventTickets.Configure").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("Nop.Plugin.Apollo.EventTickets.Configure");
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Plugin.Apollo.EventTickets.Configure") -  @T("Plugin.Apollo.EventTickets.Menu")
+    </h1>
+    <div class="float-right">
+        &nbsp;
+    </div>
+</div>
+<div class="content">
+    <div class="form-horizontal">
+        @await Component.InvokeAsync("StoreScopeConfiguration")
+        <form asp-controller="EventTickets" asp-action="Configure" method="post">
+            <nop-tabs id="EventTickets-configure">
+                <nop-tab asp-name="EventTickets-settings" asp-title="@T("Plugin.Apollo.EventTickets.Configure.Settings")" asp-default="true">
+                    <div class="cards-group">
+                        <div class="card card-default">
+                            <div class="card-body">
+                                <div>
+                                    <b>@T("Plugin.Apollo.EventTickets.Note.Restart")</b><br />
+                                    @T("Plugin.Apollo.EventTickets.Note")
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="Enabled_OverrideForStore"
+                                                                     asp-input="Enabled" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="Enabled" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <nop-editor asp-for="Enabled" />
+                                        <span asp-validation-for="Enabled"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row" style="display:@Model.EventTicketsAccessEnabled">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="EventTicketsEnabled_OverrideForStore"
+                                                                     asp-input="EventTicketsEnabled" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="EventTicketsEnabled" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <nop-editor asp-for="EventTicketsEnabled" />
+                                        <span asp-validation-for="EventTicketsEnabled"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row" style="display:@Model.EventTicketsAccessEnabled">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="EventTicketsURLPattern" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <nop-editor asp-for="EventTicketsURLPattern" />
+                                        <span asp-validation-for="EventTicketsURLPattern"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="SeperateTickets" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <nop-editor asp-for="SeperateTickets" />
+                                        <span asp-validation-for="SeperateTickets"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="ProductAttributeId_OverrideForStore" asp-input="ProductAttributeIds" asp-store-scope="Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="ProductAttributeIds" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-select asp-for="ProductAttributeIds" asp-items="Model.AvailableProductAttributes" asp-multiple="true" />
+                                        <span asp-validation-for="ProductAttributeIds"></span>
+                                    </div>
+                                    <script>
+                                        $(document).ready(function() {
+                                            var ProductAttributeIdsInput = $('#@Html.IdFor(model => model.ProductAttributeIds)').data("kendoMultiSelect");
+                                            ProductAttributeIdsInput.setOptions({
+                                                autoClose: false,
+                                                filter: "contains"
+                                                });
+                                            @if (Model.AvailableProductAttributes.Count == 0)
+                                            {
+                                                <text>
+                                                    ProductAttributeIdsInput.setOptions({
+                                                        enable: false,
+                                                        placeholder: '@T("Admin.Catalog.Products.Fields.Categories.NoCategoriesAvailable")'
+                                                    });
+                                                    ProductAttributeIdsInput._placeholder();
+                                                    ProductAttributeIdsInput._enable();
+                                                </text>
+                                            }
+                                        });
+                                    </script>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="CheckoutAttributeId_OverrideForStore" asp-input="CheckoutAttributeIds" asp-store-scope="Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="CheckoutAttributeIds" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-select asp-for="CheckoutAttributeIds" asp-items="Model.AvailableCheckoutAttributes" asp-multiple="true" />
+                                        <span asp-validation-for="CheckoutAttributeIds"></span>
+                                    </div>
+                                    <script>
+                                        $(document).ready(function() {
+                                            var checkoutAttributeIdsInput = $('#@Html.IdFor(model => model.CheckoutAttributeIds)').data("kendoMultiSelect");
+                                            checkoutAttributeIdsInput.setOptions({
+                                                autoClose: false,
+                                                filter: "contains"
+                                            });
+
+                                            @if (Model.AvailableCheckoutAttributes.Count == 0)
+                                            {
+                                                <text>
+                                                    checkoutAttributeIdsInput.setOptions({
+                                                        enable: false,
+                                                        placeholder: '@T("Plugin.Apollo.EventTickets.CheckoutAttribute.NoCheckoutAttributesAvailable")'
+                                                    });
+                                                    checkoutAttributeIdsInput._placeholder();
+                                                    checkoutAttributeIdsInput._enable();
+                                                </text>
+                                            }
+                                        });
+                                    </script>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="MaximumNumberOfOrders_OverrideForStore" asp-input="MaximumNumberOfOrders" asp-store-scope="Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="MaximumNumberOfOrders" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <nop-editor asp-for="MaximumNumberOfOrders" />
+                                        <span asp-validation-for="MaximumNumberOfOrders"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="AttachFileLocation_OverrideForStore" asp-input="AttachFileLocation" asp-store-scope="Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="AttachFileLocation" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <nop-editor asp-for="AttachFileLocation" />
+                                        <span asp-validation-for="AttachFileLocation"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="UseNopTemplatesAjaxCart" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <nop-editor asp-for="UseNopTemplatesAjaxCart" />
+                                        <span asp-validation-for="UseNopTemplatesAjaxCart"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="TestMode_OverrideForStore"
+                                                                     asp-input="TestMode" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="TestMode" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <nop-editor asp-for="TestMode" />
+                                        <span asp-validation-for="TestMode"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="DeleteTablesOnUninstall" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <nop-editor asp-for="DeleteTablesOnUninstall" />
+                                        <span asp-validation-for="DeleteTablesOnUninstall"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="DeleteConfigurationDataOnUninstall" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <nop-editor asp-for="DeleteConfigurationDataOnUninstall" />
+                                        <span asp-validation-for="DeleteConfigurationDataOnUninstall"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="PublicKey" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <nop-editor asp-for="PublicKey" />
+                                        <span asp-validation-for="PublicKey"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-9 col-md-offset-3">
+                                        <input type="submit" name="save" class="btn bg-primary" value="@T("Admin.Common.Save")" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nop-tab>
+            </nop-tabs>
+        </form>
+    </div>
+</div>
+
+@*save selected tab name*@
+<input type="hidden" id="selected-tab-name" name="selected-tab-name" value="@(Html.GetSelectedTabName())">
+<script>
+    $(document).ready(function () {
+        bindBootstrapTabSelectEvent('EventTickets-configure');
+    });
+</script>

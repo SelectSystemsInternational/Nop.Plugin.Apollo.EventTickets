@@ -1,0 +1,442 @@
+﻿@model Nop.Plugin.Apollo.EventTickets.Models.EventTicketsSalesSearchModel
+
+@using Nop.Core.Domain.Common
+@using Nop.Web.Framework.Models.DataTables
+
+@inject Nop.Services.Catalog.IProductService _productService
+
+@using Nop.Plugin.Apollo.Core.Services
+@using Nop.Plugin.Apollo.EventTickets.Models
+
+@inject AdminAreaSettings adminAreaSettings
+@inject IApolloCoreService apolloCoreService    
+
+@{
+    Layout = "_AdminLayout";
+
+    var defaultGridPageSize = adminAreaSettings.DefaultGridPageSize;
+    var gridPageSizes = adminAreaSettings.GridPageSizes;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("Nop.Plugin.Apollo.EventTickets.EventTicketsSales");
+
+    //Global script variables
+    string momentToYearFormat = "YYYY-MM-DD";
+    string momentToShortFormat = await apolloCoreService.GetLocalisedShortDateFormatAsync();
+    string kendoToStringFormat = await apolloCoreService.GetLocalisedDisplayShortDateFormatAsync();
+
+    var GroupProductsInUse = "none";
+    var AssociatedProductsInUse = "none";
+    var NameSearchInUse = string.Empty;
+}
+
+<script src="~/Plugins/SSI.Apollo.EventTickets/Scripts/moment.min.js"></script>
+
+<style>
+    thead.k-grid-header tr th:nth-child(2) {
+        min-width: 250px !important;
+    }
+</style>
+
+<div class="content">
+    <div class="form-horizontal">
+        <form asp-controller="EventTickets" asp-action="EventTicketsSales" method="post">
+            <div class="content-header clearfix">
+                <h1 class="float-left">
+                    @T("Plugin.Apollo.EventTickets.Sales")
+                </h1>
+                <div class="float-right">
+                    <div class="btn-group">
+                        <button type="button" class="btn bg-purple">
+                            <i class="fa fa-file-pdf-o"></i>
+                            @T("Plugin.Apollo.EventTickets.Admin.PdfReports")
+                        </button>
+                        <button type="button" class="btn bg-purple dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">&nbsp;</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <button type="submit" name="pdf-report-all-sales">
+                                    @T("Plugin.Apollo.EventTickets.Admin.PdfReport.All")
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" id="pdf-report-selected-sales">
+                                    @T("Plugin.Apollo.EventTickets.Admin.PdfReport.Selected")
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success">
+                            <i class="fa fa-download"></i>
+                            @T("Admin.Common.Export")
+                        </button>
+                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">&nbsp;</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <button type="submit" name="exportexcel-all-sales">
+                                    <i class="fa fa-file-excel-o"></i>
+                                    @T("Admin.Common.ExportToExcel.All")
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" id="exportexcel-selected-sales">
+                                    <i class="fa fa-file-excel-o"></i>
+                                    @T("Admin.Common.ExportToExcel.Selected")
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="btn-group" style="display:@GroupProductsInUse">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myMarkAsPaidModal">
+                            @T("Plugin.Apollo.EventTickets.Sales.SetOrdersAsPaid")
+                        </button>
+                    </div>
+                    <div class="btn-group" style="display:@GroupProductsInUse">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myMarkAsApprovedModal">
+                            @T("Plugin.Apollo.EventTickets.Sales.SetOrdersAsApproved")
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="content">
+                <div class="form-horizontal">
+                    <div class="cards-group">
+                        <div class="card card-default card-search">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group row" style="display:@GroupProductsInUse">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="GroupProductId" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="GroupProductId" asp-items="Model.AvailableGroupProducts" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" style="display:@AssociatedProductsInUse">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="AssociatedProductId" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="AssociatedProductId" asp-items="Model.AvailableAssociatedProducts" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" style="display:@NameSearchInUse">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="SearchProductName" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <nop-editor asp-for="SearchProductName" value="@Model.SearchProductName" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="FromDate" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" name="@Model.FromDate" id="FromDate" value="@Model.FDate" />
+                                                <input type="hidden" name="@Model.FDate" id="FDate" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="ToDate" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" name="@Model.ToDate" id="ToDate" value="@Model.TDate" />
+                                                <input type="hidden" name="@Model.TDate" id="TDate" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="PaymentMethod" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <nop-select asp-for="PaymentMethod" asp-items="@Model.AvailablePaymentMethods" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="OrderbyName" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="OrderbyName" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="Ispay" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="Ispay" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="text-center col-12">
+                                        <button type="button" id="Search-EventTicketsSales" class="btn btn-primary btn-search">
+                                            <i class="fas fa-search"></i>
+                                            @T("Admin.Common.Search")
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-default">
+                            <div class="card-body">
+                                @await Html.PartialAsync("Table", new DataTablesModel
+                                {
+                                    Name = "EventTicketsSales-Grid",
+                                    UrlRead = new DataUrl("EventTicketsSalesList", "EventTickets", null),
+                                    UrlDelete = new DataUrl("EventTicketsSalesListDelete", "EventTickets", null),
+                                    SearchButtonId = "Search-EventTicketsSales",
+                                    Length = Model.PageSize,
+                                    LengthMenu = Model.AvailablePageSizes,
+                                    Filters = new List<FilterParameter>
+                                    {
+                                        new FilterParameter(nameof(Model.SearchProductName)),
+                                        new FilterParameter(nameof(Model.GroupProductId)),
+                                        new FilterParameter(nameof(Model.AssociatedProductId)),
+                                        new FilterParameter(nameof(Model.FDate)),
+                                        new FilterParameter(nameof(Model.TDate)),
+                                        new FilterParameter(nameof(Model.PaymentMethod)),
+                                        new FilterParameter(nameof(Model.OrderbyName), typeof(bool)),
+                                        new FilterParameter(nameof(Model.Ispay), typeof(bool)),
+                                    },
+                                    ColumnCollection = new List<ColumnProperty>
+                                    {
+                                        new ColumnProperty(nameof(EventTicketsSalesModel.Id))
+                                        {
+                                            IsMasterCheckBox = true,
+                                            Render = new RenderCheckBox("checkbox_Accproducts"),
+                                            ClassName =  NopColumnClassDefaults.CenterAll,
+                                            Width = "30",
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsSalesModel.OrderId))
+                                        {
+                                            Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.OrderId").Text,
+                                            ClassName =  NopColumnClassDefaults.CenterAll,
+                                            Width = "40",
+                                            Render = new RenderLink(new DataUrl("~/Admin/Order/Edit/", nameof(EventTicketsSalesModel.OrderId)))
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsSalesModel.Name))
+                                        {
+                                            Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.Name").Text,
+                                            Width = "250",
+                                            Render = new RenderLink(new DataUrl("~/Admin/Ticket/Edit/", nameof(EventTicketsSalesModel.ProductId)))
+
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsSalesModel.AttributeDescription))
+                                        {
+                                            Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.AttributeDescription").Text,
+                                            Width = "200",
+                                            Encode = false
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsSalesModel.Quantity))
+                                        {
+                                            Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.Quantity").Text,
+                                            ClassName =  NopColumnClassDefaults.CenterAll,
+                                            Width = "60"
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsSalesModel.CustomerEmail))
+                                        {
+                                            Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.CustomerEmail").Text,
+                                            Width = "200"
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsSalesModel.TotalPrice))
+                                        {
+                                            Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.TotalPrice").Text,
+                                            Width = "70"
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsSalesModel.PaymentStatus))
+                                        {
+                                            Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.PaymentStatus").Text,
+                                            ClassName =  NopColumnClassDefaults.CenterAll,
+                                            Width = "50"
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsSalesModel.PaymentDate))
+                                        {
+                                            Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.PaymentDate").Text,
+                                            Width = "80"
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsSalesModel.PaymentMethodSystemName))
+                                        {
+                                            Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.PaymentMethod").Text,
+                                            Width = "150"
+                                        },
+                                        new ColumnProperty(nameof(EventTicketsSalesModel.DisplayUrl))
+                                        {
+                                            Title = T("Admin.Common.View").Text,
+                                            Width = "60",
+                                            ClassName =  NopColumnClassDefaults.Button,
+                                            Render = new RenderCustom("renderColumnDisplay")
+                                        }
+                                    }
+                                })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+        $('#@Html.IdFor(model=>model.GroupProductId)').change(function () {
+            var Selecteditem = $(this).val();
+            var ddlAssociatedProducts = $('#@Html.IdFor(model=>model.AssociatedProductId)');
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.Action("GetAssociatedProductsByGroupId", "EventTickets"))",
+                data: { GroupProductId: Selecteditem },
+                success: function (data) {
+                    ddlAssociatedProducts.html('');
+                    ddlAssociatedProducts.append($('<option></option').val(0).html('--Select--'));
+                    if (data != null) {
+                        $.each(data, function (id, option) {
+                            ddlAssociatedProducts.append($('<option></option>').val(option.id).html(option.name));
+                        });
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert('Failed to retrieve associatedProducts.');
+                }
+            });
+        });
+        function renderColumnDisplay(data, type, row, meta) {
+            if (row.DisplayUrl && row.DisplayUrl.length > 0) {
+                return '<a target="_blank" class="btn btn-default" href="' + row.DisplayUrl + '"><i class="fa fa-cog"></i>@T("Admin.Common.View")</a>';
+            } else {
+                return '';
+            }
+        }
+            </script>
+        </form>
+
+        <form asp-controller="EventTickets" asp-action="ExportSalesExcelSelected" method="post" id="export-sales-excel-selected-form">
+            <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+        </form>
+
+        <script>
+            $(document).ready(function () {
+                $('#exportexcel-selected-sales').click(function (e) {
+                    e.preventDefault();
+                    var ids = selectedIds.join(",");
+                    $('#export-sales-excel-selected-form #selectedIds').val(ids);
+                    $('#export-sales-excel-selected-form').submit();
+                    return false;
+                });
+            });
+        </script>
+
+        <form asp-controller="EventTickets" asp-action="PdfSalesReportSelected" method="post" id="pdf-report-selected-sales-form">
+            <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+        </form>
+
+        <form asp-controller="EventTickets" asp-action="MarkOrderAsPaid" method="post" id="MarkOrderAsPaid-selected-form">
+            <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+        </form>
+
+        <form asp-controller="EventTickets" asp-action="MarkOrderAsApproved" method="post" id="MarkOrderAsApproved-selected-form">
+            <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+        </form>
+
+        <script>
+            $(document).ready(function () {
+                $('#pdf-report-selected-sales').click(function (e) {
+                    debugger;
+                    e.preventDefault();
+                    var ids = selectedIds.join(",");
+                    $('#pdf-report-selected-sales-form #selectedIds').val(ids);
+                    $('#pdf-report-selected-sales-form').submit();
+                    return false;
+                });
+                $('#markorderaspaid').click(function (e) {
+                    e.preventDefault();
+                    var ids = selectedIds.join(",");
+                    $('#MarkOrderAsPaid-selected-form #selectedIds').val(ids);
+                    $('#MarkOrderAsPaid-selected-form').submit();
+                    return false;
+                });
+
+                $('#markorderasapproved').click(function (e) {
+                    e.preventDefault();
+                    var ids = selectedIds.join(",");
+                    $('#MarkOrderAsApproved-selected-form #selectedIds').val(ids);
+                    $('#MarkOrderAsApproved-selected-form').submit();
+                    return false;
+                });
+
+            });
+        </script>
+
+        <div id="myMarkAsPaidModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Are you sure?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to perform this action?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">No, Cancel</button>
+                        <button type="button" class="btn btn-primary" name="markorderaspaid" id="markorderaspaid">Yes</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="myMarkAsApprovedModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Are you sure?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to perform this action?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">No, Cancel</button>
+                        <button type="button" class="btn btn-primary" name="markorderasapproved" id="markorderasapproved">Yes</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#FromDate").kendoDatePicker({
+            format: "@kendoToStringFormat"
+        });
+        $('#FromDate').change(function () {
+            var eventStartDateTimeUtc = $('#@Html.IdFor(model => model.FromDate)').val();
+            var startDate = moment(eventStartDateTimeUtc, "@momentToShortFormat");
+            var Sdate = startDate.format("@momentToYearFormat")
+            $("#FDate").val(Sdate);
+        });
+        $("#ToDate").kendoDatePicker({
+            format: "@kendoToStringFormat"
+        });
+         $('#ToDate').change(function () {
+            var eventToDateTimeUtc =$('#@Html.IdFor(model => model.ToDate)').val()
+            var endDate = moment(eventToDateTimeUtc, "@momentToShortFormat");
+            var Edate = endDate.format("@momentToYearFormat")
+            $("#TDate").val(Edate);
+        });
+    });
+</script>

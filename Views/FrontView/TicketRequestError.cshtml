@@ -1,0 +1,31 @@
+@model TicketRequestModel
+
+@{
+    if (Model.PrintMode)
+    {
+        Layout = "_ColumnsOne";
+    }
+    else
+    {
+        Layout = "~/Plugins/SSI.Apollo.EventTickets/Views/FrontView/Shared/_TicketRequest.cshtml";
+    }
+    //title
+    NopHtml.AddTitleParts(T("PageTitle.OrderDetails").Text);
+    //page class
+    NopHtml.AppendPageCssClassParts("html-order-details-page");
+}
+
+<style>
+    body {
+        color: #000;
+        background-color: red;
+    }
+</style>
+
+<div class="page ticket-details-page">
+    <div class="page-title">
+        <div class="ticket-error">
+            <b>@T("Plugin.Apollo.EventTickets.TicketError")</b>
+        </div>
+    </div>
+</div>

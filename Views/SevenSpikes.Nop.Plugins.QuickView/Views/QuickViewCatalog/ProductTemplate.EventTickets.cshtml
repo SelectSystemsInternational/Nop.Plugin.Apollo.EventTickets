@@ -1,0 +1,13 @@
+﻿@model Nop.Web.Models.Catalog.ProductDetailsModel
+
+@{ 
+    var number = Model.AssociatedProducts.Count();
+    if (number > 0)
+    {
+        @Html.Partial("_Multi")
+    }
+    else
+    {
+        @Html.Partial("_Single")
+    }
+}

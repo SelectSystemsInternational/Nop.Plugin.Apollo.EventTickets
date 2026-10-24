@@ -1,0 +1,143 @@
+/*
+ * Ticket Request Display v4.4
+ */
+
+/* All and Default */
+
+body {
+  font: normal 9pt Arial, Helvetica, sans-serif;
+  color: #000;
+  text-align: center;
+  zoom: 1.5;
+}
+
+.ticket-error {
+  text-align: center;
+  font: normal 30pt Arial, Helvetica, sans-serif;
+}
+
+.page-title {
+  margin: 30px 0 0 0;
+  text-align: center;
+  font: normal 30pt Arial, Helvetica, sans-serif;
+}
+
+table {
+  border: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+}
+
+.ticket-details-page .order-overview {
+  margin: 0 0 25px;
+}
+
+  .ticket-details-page .order-overview .order-number {
+    font-size: 11pt;
+    text-transform: uppercase;
+    padding: 10px 40px;
+  }
+
+  .ticket-details-page .order-overview .order-total {
+    margin: 10px 0 0;
+  }
+
+    .ticket-details-page .order-overview .order-total strong {
+      font-size: 10pt;
+    }
+
+.ticket-details-page .order-details-area {
+  margin: 0 0 25px;
+  overflow: hidden;
+}
+
+  .ticket-details-page .order-details-area ul {
+    padding-left: 0px;
+  }
+
+  .ticket-details-page .order-details-area > div {
+    margin: 0;
+  }
+
+  .ticket-details-page .order-details-area li.title {
+    margin: 10px 0 5px;
+    font-weight: bold;
+  }
+
+  .ticket-details-page .order-details-area li:first-child {
+    margin-top: 0;
+  }
+
+.ticket-details-page .data-table {
+  border: 1px solid;
+}
+
+  .ticket-details-page .data-table th {
+    border-right: 1px solid;
+    border-bottom: 1px solid;
+    padding: 5px 10px;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  .ticket-details-page .data-table td {
+    border-right: 1px solid;
+    border-bottom: 1px solid;
+    padding: 5px 10px;
+  }
+
+  .ticket-details-page .data-table .sku,
+  .ticket-details-page .data-table .unit-price,
+  .ticket-details-page .data-table .quantity,
+  .ticket-details-page .data-table .total {
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  .ticket-details-page .data-table .unit-price,
+  .ticket-details-page .data-table .quantity,
+  .ticket-details-page .data-table .total {
+    width: 15%;
+  }
+
+  .ticket-details-page .data-table tablelabel {
+  }
+
+.ticket-details-page .section {
+  margin: 30px 0;
+}
+
+  .ticket-details-page .section .title {
+    margin: 0 0 10px;
+  }
+
+.ticket-details-page .tax-shipping-info,
+.ticket-details-page .selected-checkout-attributes {
+  margin: 20px 0;
+  text-align: right;
+}
+
+.ticket-details-page .cart-total-right {
+  white-space: nowrap;
+}
+
+.ticket-details-page .cart-total td {
+  padding: 5px 10px;
+  text-align: right;
+}
+
+.ticket-details-page td.cart-total-left {
+  width: 100%;
+  font-weight: bold;
+}

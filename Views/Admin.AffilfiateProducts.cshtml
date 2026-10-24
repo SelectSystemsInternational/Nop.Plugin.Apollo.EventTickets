@@ -1,0 +1,60 @@
+﻿@model ExtendedAffiliateProductSearchModel
+
+@using Nop.Services.Common
+@inject IGenericAttributeService genericAttributeService
+@inject IWorkContext workContext
+
+@{
+    const string hideAffilfiateProductBlockAttributeName = "ProductPage.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideAffilfiateProductBlockAttributeName);
+}
+
+<input asp-for="SearchProductId" type="hidden" />
+
+<nop-card asp-name="affilitae-product-info" asp-icon="fa fa-info" asp-title="@T("Plugin.Apollo.EventTickets.Affiliate.Products")" asp-hide-block-attribute-name="@hideAffilfiateProductBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">
+    <div class="card card-default">
+        <div class="content-header clearfix">
+            <div class="float-right">
+                <button type="submit" name="pdf-report-affiliate-summary" class="btn bg-purple">
+                    <i class="fa fa-print"></i>
+                    @T("Plugin.Apollo.EventTickets.Admin.PdfSummaryReport.Name")
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            @await Html.PartialAsync("Table", new DataTablesModel
+            {
+                Name = "affilite-products-grid",
+                UrlRead = new DataUrl("AffiliateProductsList", "EventTickets", null),
+                Length = Model.PageSize,
+                LengthMenu = Model.AvailablePageSizes,
+                Ordering = true,
+                ServerSide = false,
+                Filters = new List<FilterParameter>
+                {
+                    new FilterParameter(nameof(Model.SearchProductId)),
+                },
+                ColumnCollection = new List<ColumnProperty>
+                {
+                    new ColumnProperty(nameof(ExtendedAffiliateProductModel.PictureThumbnailUrl))
+                    {
+                        Title = T("Admin.Catalog.Products.Fields.PictureThumbnailUrl").Text,
+                        Width = "100",
+                        Render = new RenderPicture()
+                    },
+                    new ColumnProperty(nameof(ExtendedAffiliateProductModel.Name))
+                    {
+                        Title = T("Admin.Catalog.Products.Fields.Name").Text
+                    },
+                    new ColumnProperty(nameof(ExtendedAffiliateProductModel.Published))
+                    {
+                        Title = T("Admin.Catalog.Products.Fields.Published").Text,
+                        Width = "100",
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        Render = new RenderBoolean()
+                    }
+                }
+            })
+        </div>
+    </div>
+</nop-card>

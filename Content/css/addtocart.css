@@ -1,0 +1,66 @@
+/*
+ * Apollo Add to Cart v4.50
+ */
+
+/* All and Default */
+
+.overview .apollo-display-product {
+  padding: 2px 0px 5px 0px;
+}
+
+.overview .apollo-display-product-button {
+  display: block;
+  width: 100%;
+  border: none;
+  background-color: #eaeaea;
+  background-position: left center;
+  background-repeat: no-repeat;
+  padding: 12px 15px 12px 40px;
+  text-align: left;
+  font-size: 14px;
+  color: #666;
+  background-image: url(/Plugins/SSI.Apollo.EventTickets/Content/Icons/add-to-cart-icon.png);
+  color: #505050;
+}
+
+  .overview .apollo-display-product-button:hover {
+    color: #000;
+  }
+
+.overview .add-to-cart-button-apollo,
+.variant-overview .add-to-cart-button-apollo {
+  border: 0;
+  padding: 14px 20px 15px 34px;
+  height: 45px;
+  background: #dcdcdc url(/Plugins/SSI.Apollo.EventTickets/Content/Icons/icon-add-to-cart.png) no-repeat left top;
+  color: #505050;
+  font-size: 13px;
+  -webkit-transition: all .2s ease-in-out;
+  -moz-transition: all .2s ease-in-out;
+  -o-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+
+  .overview .add-to-cart-button-apollo:hover,
+  .variant-overview .add-to-cart-button-apollo:hover {
+    background-color: #ececec;
+  }
+
+.overview .add-to-cart-apollo .add-to-wishlist-button,
+.variant-overview .add-to-cart-apollo .add-to-wishlist-button {
+  display: none; /*removes the old button*/
+}
+
+.item-box .apollo-product-box-add-to-cart-button {
+  border: 0;
+  padding: 14px 14px 14px 34px;
+  background: #dcdcdc url(/Plugins/SSI.Apollo.EventTickets/Content/Icons/icon-add-to-cart.png) no-repeat left top;
+  color: #505050;
+  height: 44px;
+  box-shadow: none;
+  -webkit-transition: background-color .2s ease-in-out;
+  -moz-transition: background-color .2s ease-in-out;
+  -o-transition: background-color .2s ease-in-out;
+  transition: background-color .2s ease-in-out;
+  font-size: 13px;
+}

@@ -1,0 +1,607 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Language Name="English" SupportedVersion="4.30">
+	<LocaleResource Name="Sitemap.Manufacturers">
+		<Value>Artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Search.Manufacturer">
+		<Value>Artist</Value>
+	</LocaleResource>
+	<LocaleResource Name="Products.Manufacturers">
+		<Value>Artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Products.ManufacturerPartNumber">
+		<Value>Artist part number</Value>
+	</LocaleResource>
+	<LocaleResource Name="Products.Manufacturer">
+		<Value>Artist</Value>
+	</LocaleResource>
+	<LocaleResource Name="Permission.ManageManufacturers">
+		<Value>Admin area. Manage Artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="PageTitle.Manufacturers">
+		<Value>Artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Media.Manufacturer.ImageAlternateTextFormat">
+		<Value>Picture for artist {0}</Value>
+	</LocaleResource>
+	<LocaleResource Name="Manufacturers.List">
+		<Value>Artist List</Value>
+	</LocaleResource>
+	<LocaleResource Name="Manufacturers">
+		<Value>Artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Enums.Nop.Core.Domain.Discounts.DiscountType.AssignedToManufacturers">
+		<Value>Assigned to artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.System.Templates.Manufacturer">
+		<Value>Artist templates</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Reports.Sales.NeverSold.SearchManufacturer.Hint">
+		<Value>Load products only from a specific artist.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Reports.Sales.NeverSold.SearchManufacturer">
+		<Value>Artist</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Reports.Sales.Bestsellers.Manufacturer.Hint">
+		<Value>Search in a specific artist.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Reports.Sales.Bestsellers.Manufacturer">
+		<Value>Artist</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Discounts.AppliedToManufacturers.SaveBeforeEdit">
+		<Value>You need to save the discount before you can add artists for this discount page.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Discounts.AppliedToManufacturers.Manufacturer">
+		<Value>Artist</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Discounts.AppliedToManufacturers.AddNew">
+		<Value>Add a new artist</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Discounts.AppliedToManufacturers">
+		<Value>Applied to artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.ProductEditor.Manufacturers">
+		<Value>Artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.ProductEditor.ManufacturerPartNumber">
+		<Value>Artist part number</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.Media.ProductThumbPictureSize.Hint">
+		<Value>The default size (pixels) for product thumbnail images displayed on category or artist pages.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.Media.ManufacturerThumbPictureSize.Hint">
+		<Value>The default size (pixels) for artist thumbnail images.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.Media.ManufacturerThumbPictureSize">
+		<Value>Artist thumbnail image size</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.SitemapIncludeManufacturers.Hint">
+		<Value>Check if you want to include artists in sitemap.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.SitemapIncludeManufacturers">
+		<Value>Sitemap includes artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.DefaultMetaKeywords.Hint">
+		<Value>The default meta keywords for pages in your store. You can override these for individual categories / products / artist pages.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.DefaultMetaDescription.Hint">
+		<Value>The default meta description for pages in your store. You can override this for individual categories / products / artist pages.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.Catalog.ShowManufacturerPartNumber.Hint">
+		<Value>Check to show artist part numbers in public store.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.Catalog.ShowManufacturerPartNumber">
+		<Value>Show artist part number</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.Catalog.ManufacturersBlockItemsToDisplay.Hint">
+		<Value>Enter the number of artists to display in artist navigation block.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.Catalog.ManufacturersBlockItemsToDisplay">
+		<Value>Number of artists to display</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.Catalog.AllowProductViewModeChanging.Hint">
+		<Value>Check to enable the option to change view mode on category/artist details page.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.Catalog.AllowProductSorting.Hint">
+		<Value>Check to enable product sorting option on category/artist details page.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.ManufacturerPartNumber.Hint">
+		<Value>The artist's part number for this attribute combination.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.ManufacturerPartNumber">
+		<Value>Artist part number</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.List.SearchManufacturer.Hint">
+		<Value>Search by a specific artist.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.List.SearchManufacturer">
+		<Value>Artist</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.Import.ManufacturersDontExist">
+		<Value>Artists with the following names and/or IDs don't exist: {0}</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.Fields.ShortDescription.Hint">
+		<Value>Short description is the text that is displayed in product list i.e. сategory / artist pages.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.Fields.Manufacturers.NoManufacturersAvailable">
+		<Value>No artists available.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.Fields.Manufacturers.Hint">
+		<Value>Choose the artist. You can manage artists by selecting Catalog > Artists.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.Fields.Manufacturers">
+		<Value>Artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.Fields.ManufacturerPartNumber.Hint">
+		<Value>The artist's part number for this product.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.Fields.ManufacturerPartNumber">
+		<Value>Artist part number</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Updated">
+		<Value>The artist has been updated successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Products.SaveBeforeEdit">
+		<Value>You need to save the artist before you can add products for this artist page.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.List.SearchManufacturerName.Hint">
+		<Value>A artist name.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.List.SearchManufacturerName">
+		<Value>Artist name</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.List.ImportFromExcelTip">
+		<Value>Imported artists are distinguished by ID. If the ID already exists, then its corresponding artist will be updated. You should not specify ID (leave 0) for new artists.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Info">
+		<Value>Artist info</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Imported">
+		<Value>Artists have been imported successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.SeName.Hint">
+		<Value>Set a search engine friendly page name e.g. 'the-best-artist' to make your page URL 'http://www.yourStore.com/the-best-artist'. Leave empty to generate it automatically based on the name of the artist.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Published.Hint">
+		<Value>Check to publish this artist (visible in store). Uncheck to unpublish (artist not available in store).</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Picture.Hint">
+		<Value>The artist picture.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PageSize.Hint">
+		<Value>Set the page size for products in this artist e.g. '4' products per page.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Name.Hint">
+		<Value>The artist's name.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.MetaTitle.Hint">
+		<Value>Override the page title. The default is the name of the artist.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.MetaKeywords.Hint">
+		<Value>Meta keywords to be added to artist page header.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.MetaDescription.Hint">
+		<Value>Meta description to be added to artist page header.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.ManufacturerTemplate.Hint">
+		<Value>Choose a artist template. This template defines how this artist (and its products) will be displayed.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.ManufacturerTemplate">
+		<Value>Artist template</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.LimitedToStores.Hint">
+		<Value>Option to limit this artist to a certain store. If you have multiple stores, choose one or several from the list. If you don't use this option just leave this field empty.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.DisplayOrder.Hint">
+		<Value>Set the artist's display order. 1 represents the top of the list.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Discounts.Hint">
+		<Value>Select discounts to apply to this artist. You can manage discounts by selecting Discounts from the Promotions menu.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Description.Hint">
+		<Value>The description of the artist.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.AclCustomerRoles.Hint">
+		<Value>Select customer roles for which the artist will be shown. Leave empty if you want this artist to be visible to all users.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.EditManufacturerDetails">
+		<Value>Edit artist details</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Deleted">
+		<Value>The artist has been deleted successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.BackToList">
+		<Value>back to artist list</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.AddNew">
+		<Value>Add a new artist</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Added">
+		<Value>The new artist has been added successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers">
+		<Value>Artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="ActivityLog.PublicStore.ViewManufacturer">
+		<Value>Public store. Viewed a artist details page ('{0}')</Value>
+	</LocaleResource>
+	<LocaleResource Name="ActivityLog.ImportManufacturers">
+		<Value>{0} artists were imported</Value>
+	</LocaleResource>
+	<LocaleResource Name="ActivityLog.EditManufacturer">
+		<Value>Edited a artist ('{0}')</Value>
+	</LocaleResource>
+	<LocaleResource Name="ActivityLog.DeleteManufacturer">
+		<Value>Deleted a artist ('{0}')</Value>
+	</LocaleResource>
+	<LocaleResource Name="ActivityLog.AddNewManufacturer">
+		<Value>Added a new artist ('{0}')</Value>
+	</LocaleResource>
+	<LocaleResource Name="Sitemap.Manufacturers">
+		<Value>Artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Search.Manufacturer">
+		<Value>Artist</Value>
+	</LocaleResource>
+	<LocaleResource Name="Products.Manufacturers">
+		<Value>Artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Products.ManufacturerPartNumber">
+		<Value>Artist part number</Value>
+	</LocaleResource>
+	<LocaleResource Name="Products.Manufacturer">
+		<Value>Artist</Value>
+	</LocaleResource>
+	<LocaleResource Name="Permission.ManageManufacturers">
+		<Value>Admin area. Manage Artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="PageTitle.Manufacturers">
+		<Value>Artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Media.Manufacturer.ImageLinkTitleFormat">
+		<Value>Show products manufactured by {0}</Value>
+	</LocaleResource>
+	<LocaleResource Name="Media.Manufacturer.ImageAlternateTextFormat">
+		<Value>Picture for artist {0}</Value>
+	</LocaleResource>
+	<LocaleResource Name="Manufacturers.ViewAll">
+		<Value>View all</Value>
+	</LocaleResource>
+	<LocaleResource Name="Manufacturers.List">
+		<Value>Artist List</Value>
+	</LocaleResource>
+	<LocaleResource Name="Manufacturers">
+		<Value>Artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Enums.Nop.Core.Domain.Discounts.DiscountType.AssignedToManufacturers">
+		<Value>Assigned to artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.System.Templates.Manufacturer.ViewPath.Required">
+		<Value>View path is required</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.System.Templates.Manufacturer.ViewPath.Hint">
+		<Value>Enter the template view path.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.System.Templates.Manufacturer.ViewPath">
+		<Value>View path</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.System.Templates.Manufacturer.Name.Required">
+		<Value>Name is required</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.System.Templates.Manufacturer.Name.Hint">
+		<Value>Enter the template name.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.System.Templates.Manufacturer.Name">
+		<Value>Name</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.System.Templates.Manufacturer.DisplayOrder.Hint">
+		<Value>The display order of this template. 1 represents the top of the list.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.System.Templates.Manufacturer.DisplayOrder">
+		<Value>Display order</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.System.Templates.Manufacturer">
+		<Value>Artist templates</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Reports.Sales.NeverSold.SearchManufacturer.Hint">
+		<Value>Load products only from a specific artist.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Reports.Sales.NeverSold.SearchManufacturer">
+		<Value>Artist</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Reports.Sales.Bestsellers.Manufacturer.Hint">
+		<Value>Search in a specific artist.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Reports.Sales.Bestsellers.Manufacturer">
+		<Value>Artist</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Discounts.AppliedToManufacturers.SaveBeforeEdit">
+		<Value>You need to save the discount before you can add artists for this discount page.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Discounts.AppliedToManufacturers.Manufacturer">
+		<Value>Artist</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Discounts.AppliedToManufacturers.AddNew">
+		<Value>Add a new artist</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Promotions.Discounts.AppliedToManufacturers">
+		<Value>Applied to artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.ProductEditor.Manufacturers">
+		<Value>Artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.ProductEditor.ManufacturerPartNumber">
+		<Value>Artist part number</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.Media.ManufacturerThumbPictureSize.Hint">
+		<Value>The default size (pixels) for artist thumbnail images.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.Media.ManufacturerThumbPictureSize">
+		<Value>Artist thumbnail image size</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.SitemapIncludeManufacturers.Hint">
+		<Value>Check if you want to include artists in sitemap.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.SitemapIncludeManufacturers">
+		<Value>Sitemap includes artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.Catalog.ShowManufacturerPartNumber.Hint">
+		<Value>Check to show artist part numbers in public store.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.Catalog.ShowManufacturerPartNumber">
+		<Value>Show artist part number</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.Catalog.ManufacturersBlockItemsToDisplay.Hint">
+		<Value>Enter the number of artists to display in artist navigation block.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Configuration.Settings.Catalog.ManufacturersBlockItemsToDisplay">
+		<Value>Number of artists to display</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.ManufacturerPartNumber.Hint">
+		<Value>The artist's part number for this attribute combination.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.ManufacturerPartNumber">
+		<Value>Artist part number</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.List.SearchManufacturer.Hint">
+		<Value>Search by a specific artist.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.List.SearchManufacturer">
+		<Value>Artist</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.Import.ManufacturersDontExist">
+		<Value>Artists with the following names and/or IDs don't exist: {0}</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.Fields.Manufacturers.NoManufacturersAvailable">
+		<Value>No artists available.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.Fields.Manufacturers.Hint">
+		<Value>Choose the artist. You can manage artists by selecting Catalog > Artists.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.Fields.Manufacturers">
+		<Value>Artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.Fields.ManufacturerPartNumber.Hint">
+		<Value>The artist's part number for this product.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Products.Fields.ManufacturerPartNumber">
+		<Value>Artist part number</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Updated">
+		<Value>The artist has been updated successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Products.SaveBeforeEdit">
+		<Value>You need to save the artist before you can add products for this artist page.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Products.Fields.Product">
+		<Value>Product</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Products.Fields.IsFeaturedProduct">
+		<Value>Is featured product?</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Products.Fields.DisplayOrder">
+		<Value>Display order</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Products.AddNew">
+		<Value>Add a new product</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Products">
+		<Value>Products</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Mappings">
+		<Value>Mappings</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.List.SearchStore.Hint">
+		<Value>Search by a specific store.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.List.SearchStore">
+		<Value>Store</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.List.SearchPublished.UnpublishedOnly">
+		<Value>Unpublished only</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.List.SearchPublished.PublishedOnly">
+		<Value>Published only</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.List.SearchPublished.Hint">
+		<Value>Search by a "Published" property.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.List.SearchPublished.All">
+		<Value>All</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.List.SearchPublished">
+		<Value>Published</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.List.SearchManufacturerName.Hint">
+		<Value>A artist name.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.List.SearchManufacturerName">
+		<Value>Artist name</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.List.ImportFromExcelTip">
+		<Value>Imported artists are distinguished by ID. If the ID already exists, then its corresponding artist will be updated. You should not specify ID (leave 0) for new artists.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Info">
+		<Value>Artist info</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Imported">
+		<Value>Artists have been imported successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.SeName.Hint">
+		<Value>Set a search engine friendly page name e.g. 'the-best-artist' to make your page URL 'http://www.yourStore.com/the-best-artist'. Leave empty to generate it automatically based on the name of the artist.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.SeName">
+		<Value>Search engine friendly page name</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Published.Hint">
+		<Value>Check to publish this artist (visible in store). Uncheck to unpublish (artist not available in store).</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Published">
+		<Value>Published</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PriceRanges.Hint">
+		<Value>Define the price ranges for the store price range filter. Separate ranges with a semicolon e.g. '0-199;200-300;301-;' (301- means 301 and over).</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PriceRanges">
+		<Value>Price ranges</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Picture.Hint">
+		<Value>The artist picture.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Picture">
+		<Value>Picture</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PageSizeOptions.ShouldHaveUniqueItems">
+		<Value>Page size options should have unique items.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PageSizeOptions.Hint">
+		<Value>Comma separated list of page size options (e.g. 10, 5, 15, 20). First option is the default page size if none are selected.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PageSizeOptions">
+		<Value>Page size options</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PageSize.Positive">
+		<Value>Page size should have a positive value.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PageSize.Hint">
+		<Value>Set the page size for products in this artist e.g. '4' products per page.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PageSize">
+		<Value>Page size</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Name.Required">
+		<Value>Please provide a name.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Name.Hint">
+		<Value>The artist's name.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Name">
+		<Value>Name</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.MetaTitle.Hint">
+		<Value>Override the page title. The default is the name of the artist.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.MetaTitle">
+		<Value>Meta title</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.MetaKeywords.Hint">
+		<Value>Meta keywords to be added to artist page header.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.MetaKeywords">
+		<Value>Meta keywords</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.MetaDescription.Hint">
+		<Value>Meta description to be added to artist page header.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.MetaDescription">
+		<Value>Meta description</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.ManufacturerTemplate.Hint">
+		<Value>Choose a artist template. This template defines how this artist (and its products) will be displayed.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.ManufacturerTemplate">
+		<Value>Artist template</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.LimitedToStores.Hint">
+		<Value>Option to limit this artist to a certain store. If you have multiple stores, choose one or several from the list. If you don't use this option just leave this field empty.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.LimitedToStores">
+		<Value>Limited to stores</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.DisplayOrder.Hint">
+		<Value>Set the artist's display order. 1 represents the top of the list.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.DisplayOrder">
+		<Value>Display order</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Discounts.NoDiscounts">
+		<Value>No discounts available. Create at least one discount before mapping.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Discounts.Hint">
+		<Value>Select discounts to apply to this artist. You can manage discounts by selecting Discounts from the Promotions menu.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Discounts">
+		<Value>Discounts</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Description.Hint">
+		<Value>The description of the artist.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Description">
+		<Value>Description</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Deleted">
+		<Value>Deleted</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.CreatedOn">
+		<Value>Created on</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.AllowCustomersToSelectPageSize.Hint">
+		<Value>Whether customers are allowed to select the page size from a predefined list of options.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.AllowCustomersToSelectPageSize">
+		<Value>Allow customers to select page size</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.AclCustomerRoles.Hint">
+		<Value>Select customer roles for which the artist will be shown. Leave empty if you want this artist to be visible to all users.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Fields.AclCustomerRoles">
+		<Value>Limited to customer roles</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.EditManufacturerDetails">
+		<Value>Edit artist details</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Display">
+		<Value>Display</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Deleted">
+		<Value>The artist has been deleted successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.BackToList">
+		<Value>back to artist list</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.AddNew">
+		<Value>Add a new artist</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers.Added">
+		<Value>The new artist has been added successfully.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.Catalog.Manufacturers">
+		<Value>Artists</Value>
+	</LocaleResource>
+	<LocaleResource Name="ActivityLog.PublicStore.ViewManufacturer">
+		<Value>Public store. Viewed a artist details page ('{0}')</Value>
+	</LocaleResource>
+	<LocaleResource Name="ActivityLog.ImportManufacturers">
+		<Value>{0} artists were imported</Value>
+	</LocaleResource>
+	<LocaleResource Name="ActivityLog.EditManufacturer">
+		<Value>Edited a artist ('{0}')</Value>
+	</LocaleResource>
+	<LocaleResource Name="ActivityLog.DeleteManufacturer">
+		<Value>Deleted a artist ('{0}')</Value>
+	</LocaleResource>
+	<LocaleResource Name="Products.Vendor">
+		<Value>Venue</Value>
+	</LocaleResource>
+	
+</Language>

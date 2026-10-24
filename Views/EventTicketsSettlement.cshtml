@@ -1,0 +1,258 @@
+﻿@model Nop.Plugin.Apollo.EventTickets.Models.EventTicketsSettlementSearchModel
+
+@using Nop.Core.Domain.Common
+@using Nop.Web.Framework.Models.DataTables
+
+@inject Nop.Services.Catalog.IProductService _productService
+
+@using Nop.Plugin.Apollo.Core.Services
+@using Nop.Plugin.Apollo.EventTickets.Models
+
+@inject AdminAreaSettings adminAreaSettings
+@inject IApolloCoreService apolloCoreService    
+
+@{
+    Layout = "_AdminLayout";
+
+    var defaultGridPageSize = adminAreaSettings.DefaultGridPageSize;
+    var gridPageSizes = adminAreaSettings.GridPageSizes;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("Nop.Plugin.Apollo.EventTickets.EventTicketsSettlement");
+
+    //Global script variables
+    string momentToYearFormat = "YYYY-MM-DD";
+    string momentToShortFormat = await apolloCoreService.GetLocalisedShortDateFormatAsync();
+    string kendoToStringFormat = await apolloCoreService.GetLocalisedDisplayShortDateFormatAsync();
+
+    var NotRequiredInProcess = string.Empty;
+    var GroupProductsInUse = string.Empty;
+}
+
+<script src="~/Plugins/SSI.Apollo.EventTickets/Scripts/moment.min.js"></script>
+
+<style>
+    thead.k-grid-header tr th:nth-child(2) {
+        min-width: 250px !important;
+    }
+</style>
+
+<form asp-controller="EventTickets" asp-action="EventTicketsSettlement" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Plugin.Apollo.EventTickets.EventTicketsSettlement")
+        </h1>
+        <div class="float-right">
+            <div class="btn-group">
+                <button type="button" class="btn bg-purple">
+                    <i class="fa fa-file-pdf-o"></i>
+                    @T("Plugin.Apollo.EventTickets.Admin.PdfReports")
+                </button>
+                <button type="button" class="btn bg-purple dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">&nbsp;</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <button type="button" id="PDFSettlementReport">
+                            @T("Plugin.Apollo.EventTickets.Admin.PdfReport.Settlement")
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" id="PDFEventDoorReport">
+                            @T("Plugin.Apollo.EventTickets.Admin.PdfEventDoorReport.Button")
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="btn-group" style="display:@GroupProductsInUse">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myMarkAsFinalisedModal">
+                    @T("Plugin.Apollo.EventTickets.Settlement.Finalise")
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row" style="display:@GroupProductsInUse">
+                                    <div class="col-md-4">
+                                        <nop-label asp-for="GroupProductId" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <nop-select asp-for="GroupProductId" asp-items="Model.AvailableGroupProducts" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row" style="display:@NotRequiredInProcess">
+                                    <div class="col-md-4">
+                                        <nop-label asp-for="FromDate" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" name="@Model.FromDate" id="FromDate" value="@Model.FDate" />
+                                        <input type="hidden" name="@Model.FDate" id="FDate" />
+                                    </div>
+                                </div>
+                                <div class="form-group row" style="display:@NotRequiredInProcess">
+                                    <div class="col-md-4">
+                                        <nop-label asp-for="ToDate" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" name="@Model.ToDate" id="ToDate" value="@Model.TDate" />
+                                        <input type="hidden" name="@Model.TDate" id="TDate" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-center col-12">
+                                <button type="button" id="Search-EventTicketsSettlement" class="btn btn-primary btn-search" style="margin-top:0px;">
+                                    <i class="fa fa-search"></i>
+                                    @T("Admin.Common.Search")
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "EventTicketsSettlement-Grid",
+                            UrlRead = new DataUrl("EventTicketsSettlementList", "EventTickets", null),
+                            SearchButtonId = "Search-EventTicketsSettlement",
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            Filters = new List<FilterParameter>
+                            {
+                                new FilterParameter(nameof(Model.GroupProductId)),
+                                new FilterParameter(nameof(Model.FDate)),
+                                new FilterParameter(nameof(Model.TDate)),
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(EventTicketsSettlementModel.ProductId))
+                                {
+                                    IsMasterCheckBox = true,
+                                    Render = new RenderCheckBox("checkbox_Accproducts"),
+                                    ClassName =  NopColumnClassDefaults.CenterAll,
+                                    Width = "30",
+                                },
+                                new ColumnProperty(nameof(EventTicketsSettlementModel.Name))
+                                {
+                                    Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.Name").Text,
+                                    Width = "250",
+                                    Render = new RenderLink(new DataUrl("~/Admin/Ticket/Edit/", nameof(EventTicketsSalesModel.ProductId)))
+
+                                },
+                                new ColumnProperty(nameof(EventTicketsSettlementModel.Quantity))
+                                {
+                                    Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.Quantity").Text,
+                                    ClassName =  NopColumnClassDefaults.CenterAll,
+                                    Width = "50"
+                                },
+                                new ColumnProperty(nameof(EventTicketsSettlementModel.TotalCost))
+                                {
+                                    Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.TotalCost").Text,
+                                    ClassName =  NopColumnClassDefaults.CenterAll,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(EventTicketsSettlementModel.TotalSales))
+                                {
+                                    Title = T("Plugin.Apollo.EventTickets.Sales.Values.Fields.TotalSales").Text,
+                                    ClassName =  NopColumnClassDefaults.CenterAll,
+                                    Width = "80"
+                                },
+                            }
+                        })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form asp-controller="EventTickets" asp-action="MarkAsFinalised" method="post" id="MarkAsFinalised-selected-form">
+    <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+</form>
+
+<form asp-controller="EventTickets" asp-action="PDFEventDoorReport" method="post" id="PDFEventDoorReport-selected-form">
+    <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+</form>
+
+<form asp-controller="EventTickets" asp-action="PDFSettlementReport" method="post" id="PDFSettlementReport-selected-form">
+    <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#markasfinalised').click(function (e) {
+            e.preventDefault();
+            var ids = selectedIds.join(",");
+            $('#MarkAsFinalised-selected-form #selectedIds').val(ids);
+            $('#MarkAsFinalised-selected-form').submit();
+            return false;
+        });
+        $('#PDFEventDoorReport').click(function (e) {
+            e.preventDefault();
+            var ids = selectedIds.join(",");
+            $('#PDFEventDoorReport-selected-form #selectedIds').val(ids);
+            $('#PDFEventDoorReport-selected-form').submit();
+            return false;
+        });
+        $('#PDFSettlementReport').click(function (e) {
+            e.preventDefault();
+            var ids = selectedIds.join(",");
+            $('#PDFSettlementReport-selected-form #selectedIds').val(ids);
+            $('#PDFSettlementReport-selected-form').submit();
+            return false;
+        });
+    });
+</script>
+
+<div id="myMarkAsFinalisedModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Are you sure?</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to perform this action?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">No, Cancel</button>
+                <button type="button" class="btn btn-primary" name="markasfinalised" id="markasfinalised">Yes</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#FromDate").kendoDatePicker({
+            format: "@kendoToStringFormat"
+        });
+        $('#FromDate').change(function () {
+            var eventStartDateTimeUtc = $('#@Html.IdFor(model => model.FromDate)').val();
+            var startDate = moment(eventStartDateTimeUtc, "@momentToShortFormat");
+            var Sdate = startDate.format("@momentToYearFormat")
+            $("#FDate").val(Sdate);
+        });
+        $("#ToDate").kendoDatePicker({
+            format: "@kendoToStringFormat"
+        });
+         $('#ToDate').change(function () {
+            var eventToDateTimeUtc =$('#@Html.IdFor(model => model.ToDate)').val()
+            var endDate = moment(eventToDateTimeUtc, "@momentToShortFormat");
+            var Edate = endDate.format("@momentToYearFormat")
+            $("#TDate").val(Edate);
+        });
+    });
+</script>

@@ -1,0 +1,133 @@
+@model TicketModel
+
+@using Nop.Core.Domain.Common
+@using Nop.Plugin.Apollo.EventTickets.Models
+@using Nop.Plugin.Apollo.EventTickets.Services
+
+@inject Nop.Services.Catalog.IProductService _productService
+@inject AdminAreaSettings adminAreaSettings
+@inject IEventTicketService eventTicketService
+
+@{
+    Layout = "_AdminLayout";
+
+    //page title
+    ViewBag.PageTitle = T("Plugin.Apollo.EventTickets.CreateOrUpdateTicketsDetails").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("Nop.Plugin.Apollo.EventTickets.CreateOrUpdateTickets");
+
+    var defaultGridPageSize = adminAreaSettings.DefaultGridPageSize;
+    var gridPageSizes = adminAreaSettings.GridPageSizes;
+}
+
+<form asp-controller="Ticket" asp-action="Edit" method="post" id="product-form">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Plugin.Apollo.EventTickets.CreateOrUpdateTicketsDetails") - @Model.ProductModel.Name
+            <small>
+                <i class="fa fa-arrow-circle-left"></i>
+                <a asp-action="List">@T("Plugin.Apollo.EventTickets.Admin.Tickets.BackToList")</a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <button type="button" onclick="javascript:OpenWindow('@Url.RouteUrl("Product", new {SeName = Model.ProductModel.SeName})', 800, 600, true); return false;" class="btn bg-purple">
+                <i class="fa fa-eye"></i>
+                @T("Admin.Common.Preview")
+            </button>
+            <button type="submit" name="pdf-print-door-report" class="btn bg-purple">
+                <i class="fa fa-print"></i>
+                @T("Plugin.Apollo.EventTickets.Admin.PdfEventDoorReport.Name")
+            </button>
+            <button type="submit" name="save" class="btn bg-blue">
+                <i class="fa fa-floppy-o"></i>
+                @T("Admin.Common.Save")
+            </button>
+            <button type="submit" name="save-continue" class="btn bg-blue">
+                <i class="fa fa-floppy-o"></i>
+                @T("Admin.Common.SaveContinue")
+            </button>
+            <button type="button" name="copyproduct" class="btn bg-olive" data-toggle="modal" data-target="#copyproduct-window">
+                <i class="fa fa-clone"></i>
+                @T("Plugin.Apollo.EventTickets.Admin.Tickets.Copy.Button")
+            </button>
+            <span id="product-delete" class="btn bg-red">
+                <i class="fa fa-trash-o"></i>
+                @T("Admin.Common.Delete")
+            </span>
+            @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.ProductDetailsButtons, additionalData = Model.ProductModel })
+        </div>
+    </div>
+    @await Html.PartialAsync("~/Plugins/SSI.Apollo.EventTickets/Views/_CreateOrUpdateTickets.cshtml", Model)
+</form>
+<nop-delete-confirmation asp-model-id="@Model.ProductModel.Id" asp-button-id="product-delete" />
+
+@if (!Model.ProductModel.IsLoggedInAsVendor)
+{
+    //product editor settings modal
+    @await Html.PartialAsync("~/Areas/Admin/Views/Product/_ProductEditorSettingsModal.cshtml", Model.ProductModel)
+}
+
+@*copy ticket form*@
+<div id="copyproduct-window" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copyproduct-window-title">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="copyproduct-window-title">@T("Admin.Catalog.Products.Copy")</h4>
+            </div>
+            <form asp-controller="Ticket" asp-action="CopyTicket" method="post">
+                <div class="form-horizontal">
+                    <div class="modal-body">
+                        <input asp-for="CopyTicketModel.Id" type="hidden" />
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <nop-label asp-for="CopyTicketModel.Name" />
+                            </div>
+                            <div class="col-md-8">
+                                <nop-editor asp-for="CopyTicketModel.Name" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <nop-label asp-for="CopyTicketModel.Published" />
+                            </div>
+                            <div class="col-md-8">
+                                <nop-editor asp-for="CopyTicketModel.Published" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <nop-label asp-for="CopyTicketModel.CopyImages" />
+                            </div>
+                            <div class="col-md-8">
+                                <nop-editor asp-for="CopyTicketModel.CopyImages" />
+                            </div>
+                        </div>
+                        <div class="form-group row" @(Model.CopyTicketModel.AvailableTemplates.SelectionIsNotPossible(false) ? Html.Raw("style='display: none;'") : null)>
+                            <div class="col-md-4">
+                                <nop-label asp-for="CopyTicketModel.UseTemplate" />
+                            </div>
+                            <div class="col-md-8">
+                                <nop-editor asp-for="CopyTicketModel.UseTemplate" />
+                            </div>
+                        </div>
+                        <div class="form-group row" @(Model.CopyTicketModel.AvailableTemplates.SelectionIsNotPossible(false) ? Html.Raw("style='display: none;'") : null)>
+                            <div class="col-sm-4">
+                                <nop-label asp-for="CopyTicketModel.SelectedTemplateId" />
+                            </div>
+                            <div class="col-sm-8">
+                                <nop-select asp-for="CopyTicketModel.SelectedTemplateId" asp-items="Model.CopyTicketModel.AvailableTemplates" />
+                                <span asp-validation-for="CopyTicketModel.SelectedTemplateId"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            @T("Plugin.Apollo.EventTickets.Admin.Tickets.Copy.Button")
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

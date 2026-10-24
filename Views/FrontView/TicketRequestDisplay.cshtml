@@ -1,0 +1,148 @@
+@model TicketRequestModel
+
+@{
+    Layout = "~/Plugins/SSI.Apollo.EventTickets/Views/FrontView/Shared/_TicketRequest.cshtml";
+
+    //title
+    NopHtml.AddTitleParts(T("Plugin.Apollo.EventTickets.TicketDetails").Text);
+    //page class
+    NopHtml.AppendPageCssClassParts("html-order-details-page");
+
+    string ticketNumber = string.Empty;
+    if (!string.IsNullOrEmpty(Model.Items.FirstOrDefault().TicketNumber))
+        ticketNumber = "-" + Model.Items.FirstOrDefault().TicketNumber.ToString();
+}
+
+<style>
+    body {
+        color: #000;
+        background-color: green;
+    }
+</style>
+
+<div class="page ticket-details-page">
+    <div class="page-title">
+        <b>@T("Plugin.Apollo.EventTickets.TicketDetails")</b>
+    </div>
+    <div class="page-body">
+        <div class="order-overview">
+            <div class="order-number">
+                <strong>@T("Plugin.Apollo.EventTickets.TicketNumber") @Model.CustomOrderNumber@ticketNumber</strong>
+            </div>
+        </div>
+        <div class="order-details-area">
+            <div class="billing-info-wrap">
+                <div class="billing-info">
+                    <div class="title">
+                        <strong>@T("Plugin.Apollo.EventTickets.TicketHolder")</strong>
+                    </div>
+                    <ul class="info-list">
+                        <li class="name">
+                            @Model.BillingAddress.FirstName @Model.BillingAddress.LastName
+                        </li>
+                        <li class="email">
+                            <b>@T("Order.Email"):</b> @Model.BillingAddress.Email
+                        </li>
+                        <li class="phone">
+                            @T("Order.Phone"): @Model.BillingAddress.PhoneNumber
+                        </li>
+                        <li class="address1">
+                            @Model.BillingAddress.Address1
+                        </li>
+                        @if (!string.IsNullOrEmpty(Model.BillingAddress.Address2))
+                        {
+                            <li class="address2">
+                                @Model.BillingAddress.Address2
+                            </li>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.BillingAddress.City) ||
+                             !string.IsNullOrEmpty(Model.BillingAddress.County) ||
+                             !string.IsNullOrEmpty(Model.BillingAddress.StateProvinceName) ||
+                             !string.IsNullOrEmpty(Model.BillingAddress.ZipPostalCode))
+                        {
+                            <li class="city-state-zip">
+                                @if (!string.IsNullOrEmpty(Model.BillingAddress.City))
+                                {
+                                    @Model.BillingAddress.City
+                                    @if (!string.IsNullOrEmpty(Model.BillingAddress.County) ||
+                                         !string.IsNullOrEmpty(Model.BillingAddress.StateProvinceName) ||
+                                         !string.IsNullOrEmpty(Model.BillingAddress.ZipPostalCode))
+                                    {
+                                        <text>, </text>
+                                    }
+                                }
+                                @if (!string.IsNullOrEmpty(Model.BillingAddress.County))
+                                {
+                                    @Model.BillingAddress.County
+                                    @if (!string.IsNullOrEmpty(Model.BillingAddress.StateProvinceName) ||
+                                         !string.IsNullOrEmpty(Model.BillingAddress.ZipPostalCode))
+                                    {
+                                        <text>, </text>
+                                    }
+                                }
+                                @if (!string.IsNullOrEmpty(Model.BillingAddress.StateProvinceName))
+                                {
+                                    @Model.BillingAddress.StateProvinceName
+                                    @if (!string.IsNullOrEmpty(Model.BillingAddress.ZipPostalCode))
+                                    {
+                                        <text>, </text>
+                                    }
+                                }
+                                @if (!string.IsNullOrEmpty(Model.BillingAddress.ZipPostalCode))
+                                {
+                                    @Model.BillingAddress.ZipPostalCode
+                                }
+                            </li>
+                        }
+                        @if (Model.BillingAddress.CountryEnabled && !string.IsNullOrEmpty(Model.BillingAddress.CountryName))
+                        {
+                            <li class="country">
+                                @Model.BillingAddress.CountryName
+                            </li>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.BillingAddress.CountryName))
+                        {
+                            <li class="country">
+                                @Model.BillingAddress.CountryName
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        @if (Model.Items.Count > 0)
+        {
+            <div class="display products">
+                <div class="title">
+                    <strong>@T("Plugin.Apollo.EventTickets.Tickets")</strong>
+                </div>
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td class="product">
+                                        @item.ProductName
+                                        @if (!string.IsNullOrEmpty(item.AttributeInfo))
+                                        {
+                                            <div class="attributes">
+                                                @Html.Raw(item.AttributeInfo)
+                                            </div>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="quantity">
+                                        <label class="td-title">@T("Plugin.Apollo.EventTickets.TicketAdmit") </label>
+                                        <span class="product-quantity">@item.Quantity</span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>

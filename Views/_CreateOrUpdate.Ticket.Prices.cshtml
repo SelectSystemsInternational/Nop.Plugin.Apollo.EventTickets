@@ -1,0 +1,264 @@
+﻿@model TicketModel
+
+@using Nop.Services.Stores
+
+@inject IStoreService storeService
+
+@using Nop.Plugin.Apollo.EventTickets.Models
+
+@{
+    var stores = await storeService.GetAllStoresAsync();
+}
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.ProductModel.AvailableForPreOrder)").click(togglePreOrder);
+        $("#@Html.IdFor(model => model.ProductModel.CustomerEntersPrice)").click(toggleCustomerEntersPrice);
+        $("#@Html.IdFor(model => model.ProductModel.BasepriceEnabled)").click(toggleBasepriceEnabled);
+        $("#@Html.IdFor(model => model.ProductModel.IsTaxExempt)").click(toggleTax);
+
+        togglePreOrder();
+        toggleCustomerEntersPrice();
+        toggleBasepriceEnabled();
+        toggleTax();
+    });
+
+    function togglePreOrder() {
+        if ($('#@Html.IdFor(model => model.ProductModel.AvailableForPreOrder)').is(':checked')) {
+            $('#pnlPreOrderAvailabilityStartDateTimeUtc').show();
+        } else {
+            $('#pnlPreOrderAvailabilityStartDateTimeUtc').hide();
+        }
+    }
+
+
+    function toggleCustomerEntersPrice() {
+        if ($('#@Html.IdFor(model => model.ProductModel.CustomerEntersPrice)').is(':checked')) {
+            $('#pnlMinimumCustomerEnteredPrice').show();
+            $('#pnlMaximumCustomerEnteredPrice').show();
+        } else {
+            $('#pnlMinimumCustomerEnteredPrice').hide();
+            $('#pnlMaximumCustomerEnteredPrice').hide();
+        }
+    }
+
+    function toggleBasepriceEnabled() {
+        if ($('#@Html.IdFor(model => model.ProductModel.BasepriceEnabled)').is(':checked')) {
+            $('#pnlBasepriceAmount').show();
+            $('#pnlBasepriceUnit').show();
+            $('#pnlBasepriceBaseAmount').show();
+            $('#pnlBasepriceBaseUnit').show();
+        } else {
+            $('#pnlBasepriceAmount').hide();
+            $('#pnlBasepriceUnit').hide();
+            $('#pnlBasepriceBaseAmount').hide();
+            $('#pnlBasepriceBaseUnit').hide();
+        }
+    }
+
+    function toggleTax() {
+        if ($('#@Html.IdFor(model => model.ProductModel.IsTaxExempt)').is(':checked')) {
+            $('#pnlTaxCategory').hide();
+        } else {
+            $('#pnlTaxCategory').show();
+        }
+    }
+</script>
+
+<div class="card-body">
+    <div class="form-group row" id="product-price-area">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.Price" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.Price" asp-postfix="@Model.ProductModel.PrimaryStoreCurrencyCode" />
+            <span asp-validation-for="ProductModel.Price"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.OldPrice ? null : "advanced-setting")">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.OldPrice" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.OldPrice" asp-postfix="@Model.ProductModel.PrimaryStoreCurrencyCode" />
+            <span asp-validation-for="ProductModel.OldPrice"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.ProductCost ? null : "advanced-setting")">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.ProductCost" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.ProductCost" asp-postfix="@Model.ProductModel.PrimaryStoreCurrencyCode" />
+            <span asp-validation-for="ProductModel.ProductCost"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.DisableBuyButton ? null : "advanced-setting")">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.DisableBuyButton" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.DisableBuyButton" />
+            <span asp-validation-for="ProductModel.DisableBuyButton"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.DisableWishlistButton ? null : "advanced-setting")">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.DisableWishlistButton" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.DisableWishlistButton" />
+            <span asp-validation-for="ProductModel.DisableWishlistButton"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.AvailableForPreOrder ? null : "advanced-setting")">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.AvailableForPreOrder" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.AvailableForPreOrder" />
+            <span asp-validation-for="ProductModel.AvailableForPreOrder"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="ProductModel.AvailableForPreOrder">
+        <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.AvailableForPreOrder ? null : "advanced-setting")" id="pnlPreOrderAvailabilityStartDateTimeUtc">
+            <div class="col-md-3">
+                <nop-label asp-for="ProductModel.PreOrderAvailabilityStartDateTimeUtc" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="ProductModel.PreOrderAvailabilityStartDateTimeUtc" />
+                <span asp-validation-for="ProductModel.PreOrderAvailabilityStartDateTimeUtc"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.CallForPrice ? null : "advanced-setting")">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.CallForPrice" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.CallForPrice" />
+            <span asp-validation-for="ProductModel.CallForPrice"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.CustomerEntersPrice ? null : "advanced-setting")">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.CustomerEntersPrice" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.CustomerEntersPrice" />
+            <span asp-validation-for="ProductModel.CustomerEntersPrice"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="ProductModel.CustomerEntersPrice">
+        <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.CustomerEntersPrice ? null : "advanced-setting")" id="pnlMinimumCustomerEnteredPrice">
+            <div class="col-md-3">
+                <nop-label asp-for="ProductModel.MinimumCustomerEnteredPrice" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="ProductModel.MinimumCustomerEnteredPrice" asp-postfix="@Model.ProductModel.PrimaryStoreCurrencyCode" />
+                <span asp-validation-for="ProductModel.MinimumCustomerEnteredPrice"></span>
+            </div>
+        </div>
+        <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.CustomerEntersPrice ? null : "advanced-setting")" id="pnlMaximumCustomerEnteredPrice">
+            <div class="col-md-3">
+                <nop-label asp-for="ProductModel.MaximumCustomerEnteredPrice" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="ProductModel.MaximumCustomerEnteredPrice" asp-postfix="@Model.ProductModel.PrimaryStoreCurrencyCode" />
+                <span asp-validation-for="ProductModel.MaximumCustomerEnteredPrice"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.PAngV ? null : "advanced-setting")">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.BasepriceEnabled" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.BasepriceEnabled" />
+            <span asp-validation-for="ProductModel.BasepriceEnabled"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="ProductModel.BasepriceEnabled">
+        <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.PAngV ? null : "advanced-setting")" id="pnlBasepriceAmount">
+            <div class="col-md-3">
+                <nop-label asp-for="ProductModel.BasepriceAmount" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="ProductModel.BasepriceAmount" />
+                <span asp-validation-for="ProductModel.BasepriceAmount"></span>
+            </div>
+        </div>
+        <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.PAngV ? null : "advanced-setting")" id="pnlBasepriceUnit">
+            <div class="col-md-3">
+                <nop-label asp-for="ProductModel.BasepriceUnitId" />
+            </div>
+            <div class="col-md-9">
+                <nop-select asp-for="ProductModel.BasepriceUnitId" asp-items="Model.ProductModel.AvailableBasepriceUnits" />
+                <span asp-validation-for="ProductModel.BasepriceUnitId"></span>
+            </div>
+        </div>
+        <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.PAngV ? null : "advanced-setting")" id="pnlBasepriceBaseAmount">
+            <div class="col-md-3">
+                <nop-label asp-for="ProductModel.BasepriceBaseAmount" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="ProductModel.BasepriceBaseAmount" />
+                <span asp-validation-for="ProductModel.BasepriceBaseAmount"></span>
+            </div>
+        </div>
+        <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.PAngV ? null : "advanced-setting")" id="pnlBasepriceBaseUnit">
+            <div class="col-md-3">
+                <nop-label asp-for="ProductModel.BasepriceBaseUnitId" />
+            </div>
+            <div class="col-md-9">
+                <nop-select asp-for="ProductModel.BasepriceBaseUnitId" asp-items="Model.ProductModel.AvailableBasepriceBaseUnits" />
+                <span asp-validation-for="ProductModel.BasepriceBaseUnitId"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.Discounts ? null : "advanced-setting")">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.SelectedDiscountIds" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="ProductModel.SelectedDiscountIds" asp-items="Model.ProductModel.AvailableDiscounts" asp-multiple="true" />
+            <script>
+                $(document).ready(function() {
+                    var discountsIdsInput = $('#@Html.IdFor(model => model.ProductModel.SelectedDiscountIds)').data("kendoMultiSelect");
+                    discountsIdsInput.setOptions({
+                        autoClose: false,
+                        filter: "contains"
+                    });
+                @if (Model.ProductModel.AvailableDiscounts.Count == 0)
+                {
+                    <text>
+                    discountsIdsInput.setOptions({
+                        enable: false,
+                        placeholder: '@T("Admin.Catalog.Products.Fields.Discounts.NoDiscounts")'
+                    });
+                    discountsIdsInput._placeholder();
+                    discountsIdsInput._enable();
+                    </text>
+                    }
+                });
+            </script>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.IsTaxExempt" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.IsTaxExempt" />
+            <span asp-validation-for="ProductModel.IsTaxExempt"></span>
+        </div>
+    </div>
+    <div class="form-group row" id="pnlTaxCategory">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.TaxCategoryId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="ProductModel.TaxCategoryId" asp-items="Model.ProductModel.AvailableTaxCategories" />
+            <span asp-validation-for="ProductModel.TaxCategoryId"></span>
+        </div>
+    </div>
+</div>

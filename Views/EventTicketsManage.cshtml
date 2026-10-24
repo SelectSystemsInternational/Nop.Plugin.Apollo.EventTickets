@@ -1,0 +1,35 @@
+﻿@model Nop.Plugin.Apollo.EventTickets.Models.ManagementModel
+
+@using Nop.Core.Domain.Common
+@using Nop.Plugin.Apollo.EventTickets.Services
+
+@inject Nop.Services.Catalog.IProductService _productService
+@inject AdminAreaSettings adminAreaSettings
+@inject IEventTicketService eventTicketService
+
+@{
+    Layout = "_AdminLayout";
+
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("Nop.Plugin.Apollo.EventTickets.Manage");
+}
+
+<div class="content">
+    <div class="form-horizontal">
+        <div class="content-header clearfix">
+            <h1 class="float-left">
+                @T("Plugin.Apollo.EventTickets.Manage")
+            </h1>
+            <div class="float-right">
+            </div>
+        </div>
+        <div class="form-horizontal">
+            <form asp-controller="Apollo" asp-action="AccommodationCalendar" method="post">
+                <div class="col-md-12">
+                    @await Html.PartialAsync("~/Plugins/SSI.Apollo.EventTickets/Views/_EventTicketsProductTypeExtensionSettings.cshtml",
+                        Model.EventTicketsProductTypeExtensionSettingsSearchModel)
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

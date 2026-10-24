@@ -1,0 +1,18 @@
+﻿@model AffiliateModel
+
+@{
+    const string hideInfoBlockAttributeName = "AffiliatePage.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName);
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<div class="content">
+    <div class="form-horizontal">
+        <nop-cards id="affiliate-panels">
+            <nop-card asp-name="affiliate-info" asp-icon="fa fa-info" asp-title="@T("Admin.Affiliates.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock">@await Html.PartialAsync("~/Plugins/SSI.Apollo.EventTickets/Views/Agent/_CreateOrUpdate.Info.cshtml", Model)</nop-card>
+            @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.AffiliateDetailsBlock, additionalData = Model })
+        </nop-cards>
+    </div>
+</div>

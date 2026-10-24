@@ -1,0 +1,11 @@
+/*
+ * Apollo Event Tickets for Emporium v4.5
+ */
+
+.item-box .product-title, .item-box .title {
+  height: 70px;
+  overflow: auto;
+  font-size: 15px;
+  font-weight: normal;
+  color: #444;
+}

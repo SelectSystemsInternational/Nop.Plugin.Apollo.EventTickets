@@ -1,0 +1,37 @@
+@model AffiliateModel
+
+<div class="card-body">
+    <div class="cards-group">
+        <div class="card card-default">
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="Active" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="Active" />
+                        <span asp-validation-for="Active"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card-default">
+            <div class="card-body">
+                <nop-editor asp-for="Address" asp-template="Address" />
+            </div>
+        </div>
+        <div class="card card-default">
+            <div class="panel-body">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="AdminComment" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-textarea asp-for="AdminComment"></nop-textarea>
+                        <span asp-validation-for="AdminComment"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

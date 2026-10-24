@@ -1,0 +1,351 @@
+﻿@model TicketModel
+
+@using Nop.Core.Domain.Catalog
+@using Nop.Services
+
+@using Nop.Plugin.Apollo.EventTickets.Models
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.ProductModel.ManageInventoryMethodId)").change(toggleManageStock);
+        $("#@Html.IdFor(model => model.ProductModel.UseMultipleWarehouses)").click(toggleManageStock);
+        $("#@Html.IdFor(model => model.ProductModel.BackorderModeId)").change(toggleManageStock);
+        $("#@Html.IdFor(model => model.ProductModel.DisplayStockAvailability)").click(toggleManageStock);
+
+        toggleManageStock();
+    });
+
+
+    function toggleManageStock() {
+        var dontManageStockId = "@((int)ManageInventoryMethod.DontManageStock)";
+        var manageStockId = "@((int)ManageInventoryMethod.ManageStock)";
+        var noBackordersId = "@((int)BackorderMode.NoBackorders)";
+        var allowQtyBelow0Id = "@((int)BackorderMode.AllowQtyBelow0)";
+        var allowQtyBelow0AndNotifyCustomerId = "@((int)BackorderMode.AllowQtyBelow0AndNotifyCustomer)";
+
+        var selectedManageInventoryMethodId = $("#@Html.IdFor(model => model.ProductModel.ManageInventoryMethodId)").val();
+        if (selectedManageInventoryMethodId == dontManageStockId) {
+            $('#pnlProductAvailabilityRange').hide();
+            $('#pnlUseMultipleWarehouses').hide();
+            $('#pnlWarehouse').show();
+            $('#pnlMultipleWarehouses').hide();
+            $('#pnlStockQuantity').hide();
+            $('#pnlDisplayStockAvailability').hide();
+            $('#pnlDisplayStockQuantity').hide();
+            $('#pnlMinStockQuantity').hide();
+            $('#pnlLowStockActivity').hide();
+            $('#pnlNotifyForQuantityBelow').hide();
+            $('#pnlAllowBackInStockSubscriptions').hide();
+            $('#pnlBackorders').hide();
+            $('#pnlAllowAddingOnlyExistingAttributeCombinations').hide();
+
+            $('[data-card-name=product-stock-quantity-history]').hide();
+        } else if (selectedManageInventoryMethodId == manageStockId) {
+            $('#pnlUseMultipleWarehouses').show();
+
+            if ($('#@Html.IdFor(model => model.ProductModel.UseMultipleWarehouses)').is(':checked')) {
+                $('#pnlWarehouse').hide();
+                $('#pnlMultipleWarehouses').show();
+                $('#pnlStockQuantity').hide();
+            } else {
+                $('#pnlWarehouse').show();
+                $('#pnlMultipleWarehouses').hide();
+                $('#pnlStockQuantity').show();
+            }
+
+            $('#pnlDisplayStockAvailability').show();
+            if ($('#@Html.IdFor(model => model.ProductModel.DisplayStockAvailability)').is(':checked')) {
+                $('#pnlDisplayStockQuantity').show();
+            } else {
+                $('#pnlDisplayStockQuantity').hide();
+            }
+
+            $('#pnlMinStockQuantity').show();
+            $('#pnlLowStockActivity').show();
+            $('#pnlNotifyForQuantityBelow').show();
+            $('#pnlBackorders').show();
+
+            var selectedBackorderModeId = $("#@Html.IdFor(model => model.ProductModel.BackorderModeId)").val();
+            if (selectedBackorderModeId == noBackordersId) {
+                //no backorders
+                $('#pnlAllowBackInStockSubscriptions').show();
+                $('#pnlProductAvailabilityRange').show();
+            } else if (selectedBackorderModeId == allowQtyBelow0AndNotifyCustomerId) {
+                //backorders are enabled
+                $('#pnlAllowBackInStockSubscriptions').hide();
+                $('#pnlProductAvailabilityRange').show();
+            }
+            else if (selectedBackorderModeId == allowQtyBelow0Id) {
+                //backorders are enabled
+                $('#pnlAllowBackInStockSubscriptions').hide();
+                $('#pnlProductAvailabilityRange').hide();
+            }
+
+            $('#pnlAllowAddingOnlyExistingAttributeCombinations').hide();
+
+            $('[data-card-name=product-stock-quantity-history]').show();
+        } else {
+            $('#pnlProductAvailabilityRange').show();
+            $('#pnlUseMultipleWarehouses').hide();
+            $('#pnlWarehouse').show();
+            $('#pnlMultipleWarehouses').hide();
+            $('#pnlStockQuantity').hide();
+            $('#pnlDisplayStockAvailability').show();
+
+            if ($('#@Html.IdFor(model => model.ProductModel.DisplayStockAvailability)').is(':checked')) {
+                $('#pnlDisplayStockQuantity').show();
+            } else {
+                $('#pnlDisplayStockQuantity').hide();
+            }
+            $('#pnlMinStockQuantity').hide();
+            $('#pnlLowStockActivity').hide();
+            $('#pnlNotifyForQuantityBelow').hide();
+            $('#pnlAllowBackInStockSubscriptions').hide();
+            $('#pnlBackorders').hide();
+            $('#pnlAllowAddingOnlyExistingAttributeCombinations').show();
+
+            $('[data-card-name=product-stock-quantity-history]').show();
+        }
+    }
+
+</script>
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.ManageInventoryMethodId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="ProductModel.ManageInventoryMethodId" asp-items="@(await ((ManageInventoryMethod)Model.ProductModel.ManageInventoryMethodId).ToSelectListAsync())" />
+            <span asp-validation-for="ProductModel.ManageInventoryMethodId"></span>
+        </div>
+    </div>
+    <div class="form-group row" id="pnlStockQuantity">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.StockQuantity" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.StockQuantity" />
+            <input type="hidden" asp-for="ProductModel.LastStockQuantity" />
+            <span asp-validation-for="ProductModel.StockQuantity"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.MinimumCartQuantity ? null : "advanced-setting")">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.OrderMinimumQuantity" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.OrderMinimumQuantity" />
+            <span asp-validation-for="ProductModel.OrderMinimumQuantity"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.MaximumCartQuantity ? null : "advanced-setting")">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.OrderMaximumQuantity" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.OrderMaximumQuantity" />
+            <span asp-validation-for="ProductModel.OrderMaximumQuantity"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.AllowedQuantities ? null : "advanced-setting")">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.AllowedQuantities" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.AllowedQuantities" />
+            <span asp-validation-for="ProductModel.AllowedQuantities"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.MinimumStockQuantity ? null : "advanced-setting")" id="pnlMinStockQuantity">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.MinStockQuantity" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.MinStockQuantity" />
+            <span asp-validation-for="ProductModel.MinStockQuantity"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.LowStockActivity ? null : "advanced-setting")" id="pnlLowStockActivity">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.LowStockActivityId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="ProductModel.LowStockActivityId" asp-items="@(await ((LowStockActivity)Model.ProductModel.LowStockActivityId).ToSelectListAsync())" />
+            <span asp-validation-for="ProductModel.LowStockActivityId"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.NotifyAdminForQuantityBelow ? null : "advanced-setting")" id="pnlNotifyForQuantityBelow">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.NotifyAdminForQuantityBelow" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.NotifyAdminForQuantityBelow" />
+            <span asp-validation-for="ProductModel.NotifyAdminForQuantityBelow"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.Warehouse ? null : "advanced-setting")" id="pnlWarehouse">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.WarehouseId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="ProductModel.WarehouseId" asp-items="Model.ProductModel.AvailableWarehouses" />
+            <span asp-validation-for="ProductModel.WarehouseId"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.UseMultipleWarehouses ? null : "advanced-setting")" id="pnlUseMultipleWarehouses">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.UseMultipleWarehouses" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.UseMultipleWarehouses" />
+            <span asp-validation-for="ProductModel.UseMultipleWarehouses"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.UseMultipleWarehouses ? null : "advanced-setting")" id="pnlMultipleWarehouses">
+        <div class="col-md-12" style="overflow-x: auto;">
+            @if (Model.ProductModel.ProductWarehouseInventoryModels.Count > 0)
+            {
+                <table class="table table-hover table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th>
+                                @T("Admin.Catalog.Products.ProductWarehouseInventory.Fields.Warehouse")
+                            </th>
+                            <th>
+                                @T("Admin.Catalog.Products.ProductWarehouseInventory.Fields.WarehouseUsed")
+                            </th>
+                            <th>
+                                @T("Admin.Catalog.Products.ProductWarehouseInventory.Fields.StockQuantity")
+                            </th>
+                            <th>
+                                @T("Admin.Catalog.Products.ProductWarehouseInventory.Fields.ReservedQuantity")
+                            </th>
+                            <th>
+                                @T("Admin.Catalog.Products.ProductWarehouseInventory.Fields.PlannedQuantity")
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ProductModel.ProductWarehouseInventoryModels)
+                        {
+                            <tr>
+                                <td style="width: 36%;">
+                                    <div style="padding-left: 10px; padding-right: 10px;">
+                                        @item.WarehouseName
+                                    </div>
+                                </td>
+                                <td style="width: 10%;">
+                                    <input type="checkbox" id="warehouse_used_@(item.WarehouseId)" name="warehouse_used_@(item.WarehouseId)" value="@item.WarehouseId" checked="@item.WarehouseUsed" />
+                                    <script>
+                                        $(document).ready(function() {
+                                            $("#warehouse_used_@(item.WarehouseId)").change(toggleWarehouseUsed_@(item.WarehouseId));
+                                            toggleWarehouseUsed_@(item.WarehouseId)();
+                                        });
+
+                                        function toggleWarehouseUsed_@(item.WarehouseId)() {
+                                            if ($('#warehouse_used_@(item.WarehouseId)').is(':checked')) {
+                                                $('#warehouse_qty_@(item.WarehouseId)').prop('disabled', false);
+                                                $('#warehouse_reserved_@(item.WarehouseId)').prop('disabled', false);
+                                            } else {
+                                                $('#warehouse_qty_@(item.WarehouseId)').prop('disabled', true);
+                                                $('#warehouse_reserved_@(item.WarehouseId)').prop('disabled', true);
+                                            }
+                                        }
+                                    </script>
+                                </td>
+                                <td style="width: 18%;">
+                                    <input id="warehouse_qty_@(item.WarehouseId)" name="warehouse_qty_@(item.WarehouseId)" type="number" value="@item.StockQuantity" class="form-control" />
+                                </td>
+                                <td style="width: 18%;">
+                                    <input id="warehouse_reserved_@(item.WarehouseId)" name="warehouse_reserved_@(item.WarehouseId)" type="number" value="@item.ReservedQuantity" class="form-control" />
+                                </td>
+                                <td style="width: 18%;">
+                                    @item.PlannedQuantity
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <p>
+                    <em>@T("Admin.Catalog.Products.ProductWarehouseInventory.Description1")</em>
+                </p>
+                <p>
+                    <em>@T("Admin.Catalog.Products.ProductWarehouseInventory.Description2")</em>
+                </p>
+                <p>
+                    <em>@T("Admin.Catalog.Products.ProductWarehouseInventory.Description3")</em>
+                </p>
+            }
+            else
+            {
+                @T("Admin.Catalog.Products.ProductWarehouseInventory.Fields.Warehouse.NotDefined")
+            }
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.DisplayStockAvailability ? null : "advanced-setting")" id="pnlDisplayStockAvailability">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.DisplayStockAvailability" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.DisplayStockAvailability" />
+            <span asp-validation-for="ProductModel.DisplayStockAvailability"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="ProductModel.DisplayStockAvailability">
+        <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.DisplayStockAvailability ? null : "advanced-setting")" id="pnlDisplayStockQuantity">
+            <div class="col-md-3">
+                <nop-label asp-for="ProductModel.DisplayStockQuantity" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="ProductModel.DisplayStockQuantity" />
+                <span asp-validation-for="ProductModel.DisplayStockQuantity"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.Backorders ? null : "advanced-setting")" id="pnlBackorders">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.BackorderModeId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="ProductModel.BackorderModeId" asp-items="@(await ((BackorderMode)Model.ProductModel.BackorderModeId).ToSelectListAsync())" />
+            <span asp-validation-for="ProductModel.BackorderModeId"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.AllowBackInStockSubscriptions ? null : "advanced-setting")" id="pnlAllowBackInStockSubscriptions">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.AllowBackInStockSubscriptions" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.AllowBackInStockSubscriptions" />
+            <span asp-validation-for="ProductModel.AllowBackInStockSubscriptions"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.ProductAvailabilityRange ? null : "advanced-setting")" id="pnlProductAvailabilityRange">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.ProductAvailabilityRangeId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="ProductModel.ProductAvailabilityRangeId" asp-items="Model.ProductModel.AvailableProductAvailabilityRanges" />
+            <span asp-validation-for="ProductModel.ProductAvailabilityRangeId"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.AllowAddingOnlyExistingAttributeCombinations ? null : "advanced-setting")" id="pnlAllowAddingOnlyExistingAttributeCombinations">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.AllowAddingOnlyExistingAttributeCombinations" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.AllowAddingOnlyExistingAttributeCombinations" />
+            <span asp-validation-for="ProductModel.AllowAddingOnlyExistingAttributeCombinations"></span>
+        </div>
+    </div>
+    <div class="form-group row @(Model.ProductModel.ProductEditorSettingsModel.NotReturnable ? null : "advanced-setting")">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductModel.NotReturnable" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductModel.NotReturnable" />
+            <span asp-validation-for="ProductModel.NotReturnable"></span>
+        </div>
+    </div>
+</div>

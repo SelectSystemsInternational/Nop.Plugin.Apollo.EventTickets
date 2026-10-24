@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
+	<PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+		<Copyright>Copyright © Select Systems International</Copyright>
+		<Company>Select Systems International - www.selectsystems.com.au</Company>
+		<Authors>Select Systems International</Authors>
+		<Description>The plugin allows you to manage Event Ticket orders and workflows.</Description>
+		<PackageLicenseUrl></PackageLicenseUrl>
+		<PackageProjectUrl>https://www.selectsystems.com.au/event-tickets-system-plugin</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/SelectSystemsInternational/Nop.Plugin.Apollo.EventTickets</RepositoryUrl>
+    <PackageTags>Event Tickets</PackageTags>
+		<RepositoryType>Git</RepositoryType>
+    <Version>4.80.9.8</Version>
+    <AssemblyVersion>4.80.9.8</AssemblyVersion>
+    <FileVersion>4.80.9.8</FileVersion>
+    <OutputPath>..\..\..\Presentation\Nop.Web\Plugins\SSI.Apollo.EventTickets</OutputPath>
+    <OutDir>$(OutputPath)</OutDir>    
+		<!--Set this parameter to true to get the dlls copied from the NuGet cache to the output of your project.
+			You need to set this parameter to true if your plugin has a nuget package 
+			to ensure that the dlls copied from the NuGet cache to the output of your project-->
+		<CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Update="plugin.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="logo.jpg">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+    <None Update="Content\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+		<Content Include="Views\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nop.Plugin.Apollo.Core\Nop.Plugin.Apollo.Core.csproj">
+      <Private>False</Private>
+    </ProjectReference>
+    <Reference Include="QRCoder">
+      <HintPath>QRCoder.dll</HintPath>
+    </Reference>
+    <PackageReference Include="iTextSharp.LGPLv2.Core" Version="3.7.4" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+    <ClearPluginAssemblies Include="$(SolutionDir)\Build\ClearPluginAssemblies.proj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\FrontView\Shared\Themes\DefaultClean\" />
+    <Folder Include="Views\FrontView\Shared\Themes\Emporium\" />
+    <Folder Include="Views\FrontView\Shared\Themes\Motion\" />
+    <Folder Include="Views\FrontView\Shared\Themes\Pacific\" />
+    <Folder Include="Views\FrontView\Shared\Themes\Prisma\" />
+  </ItemGroup>
+
+  <!-- This target execute after "Build" target -->
+  <Target Name="NopTarget" AfterTargets="Build">
+    <!-- Delete unnecessary libraries from plugins path -->
+    <MSBuild Projects="@(ClearPluginAssemblies)" Properties="PluginPath=$(OutDir)" Targets="NopClear" />
+    <!-- Delete extra folders and files from plugin output directory -->
+    <!-- RemoveDir Directories="$(OutDir)\refs;$(OutDir)\ref" -->
+    <!-- Delete Files="$(OutDir)\$(AssemblyName).deps.json;$(OutDir)\$(AssemblyName).pdb;$(OutDir)\$(AssemblyName).staticwebassets.runtime.json" -->
+  </Target>
+  
+</Project>
