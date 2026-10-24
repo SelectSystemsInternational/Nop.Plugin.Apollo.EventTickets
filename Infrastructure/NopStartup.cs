@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using Nop.Core.Infrastructure;
-using Nop.Services.Messages;
-using Nop.Services.Orders;
+using Nop.Services.Common;
 
 using Nop.Plugin.Apollo.Core.Services;
 using Nop.Plugin.Apollo.EventTickets.ActionFilter;
@@ -34,6 +34,7 @@ public class NopStartup : INopStartup
         services.AddScoped<IEventTicketsMessageService, EventTicketsMessageService>();
         services.AddScoped<IEventTicketsModelFactory, EventTicketsModelFactory>();
         services.AddScoped<IEventTicketsPdfService, EventTicketsPdfService>();
+        services.AddScoped<IEventTicketPdfRenderer, EventTicketsPdfService>();
         services.AddScoped<IExportImportManager, ExportImportManager>();
 
         //add object context
@@ -55,5 +56,5 @@ public class NopStartup : INopStartup
     {
     }
 
-    public int Order => 3000;
+    public int Order => int.MaxValue;
 }
